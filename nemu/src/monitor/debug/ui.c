@@ -52,11 +52,21 @@ static int cmd_info(char *args) {
 			for(i=0;i<8;i++) printf("%s 0x%08x\n",regsl[i],reg_l(i));
 			printf("eip 0x%08x\n",cpu.eip);
 			break;
-		default:printf("illegel command!\n");
+		default:
+			printf("illegel command!\n");
+			assert(0);
 	}
 	return 0;
 }
-static int cmd_x(char *args) {return 0;}
+static int cmd_x(char *args) {
+	int i,n;
+	swaddr_t addr;
+	sscanf(args,"%d %x",&n,&addr);
+	printf("0x%08x:\n",addr);
+	for(i=0;i<n;i++,addr+=4) printf("0x%08x\n ",swaddr_read(addr,4));
+	printf("\n");
+	return 0;
+}
 static int cmd_p(char *args) {return 0;}
 static int cmd_b(char *args) {return 0;}
 static int cmd_w(char *args) {return 0;}
