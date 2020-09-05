@@ -27,6 +27,8 @@ char* rl_gets() {
 	return line_read;
 }
 
+static int cmd_help(char *args);
+
 static int cmd_c(char *args) {
 	cpu_exec(-1);
 	return 0;
@@ -36,19 +38,39 @@ static int cmd_q(char *args) {
 	return -1;
 }
 
-static int cmd_help(char *args);
+static int cmd_si(char *args) {
+	int num=1;
+	if(args) sscanf(args,"%d",&num);
+	cpu_exec(num);
+	return 0;
+}
+
+static int cmd_info(char *args) {return  0;}
+static int cmd_x(char *args) {return  0;}
+static int cmd_p(char *args) {return  0;}
+static int cmd_b(char *args) {return  0;}
+static int cmd_w(char *args) {return  0;}
+static int cmd_d(char *args) {return  0;}
+static int cmd_bt(char *args) {return  0;}
+static int cmd_cache(char *args) {return  0;}
 
 static struct {
 	char *name;
 	char *description;
-	int (*handler) (char *);
-} cmd_table [] = {
+	int (*handler)(char *);
+} cmd_table[]={
 	{ "help", "Display informations about all supported commands", cmd_help },
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
-
-	/* TODO: Add more commands */
-
+	{ "si", "Step into implementation of N instructions after the suspension of execution.When N is notgiven,the default is 1.", cmd_si},
+	{ "info", "r for print register state\nw for print watchpoint information", cmd_info},
+	{ "x", "Calculate the value of the expression and regard the result as the starting memory address.", cmd_x},
+	{ "p", "Expression evaluation", cmd_p},
+	{ "b", "Breakpoint + *ADDR.", cmd_b},
+	{ "w", "Stop the execution of the program if the result of the expression has changed.", cmd_w},
+	{ "d", "Delete the Nth watchpoint", cmd_d},
+	{ "bt", "Print stack frame chain", cmd_bt},
+	{ "cache", "Print cache block infomation", cmd_cache}
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))

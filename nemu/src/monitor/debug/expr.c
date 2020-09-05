@@ -6,26 +6,31 @@
 #include <sys/types.h>
 #include <regex.h>
 
-enum {
-	NOTYPE = 256, EQ
-
-	/* TODO: Add more token types */
-
-};
+enum {NOTYPE = 256, EQ , NEQ , AND , OR , MINUS , POINTOR , NUMBER , HNUMBER , REGISTER , MARK};
 
 static struct rule {
 	char *regex;
-	int token_type;
-} rules[] = {
-
-	/* TODO: Add more rules.
-	 * Pay attention to the precedence level of different rules.
-	 */
-
-	{" +",	NOTYPE},				// spaces
-	{"\\+", '+'},					// plus
-	{"==", EQ}						// equal
+	int token_type,priority;
+} rules[]={
+	{"\\b[0-9]+\\b",NUMBER,0},				// number
+	{"\\b0[xX][0-9a-fA-F]+\\b",HNUMBER,0},		// 16 number
+	{"\\$[a-zA-Z]+",REGISTER,0},				// register
+	{"\\b[a-zA-Z_0-9]+" , MARK , 0},		// mark
+	{"!=",NEQ,3},						// not equal	
+	{"!",'!',6},						// not
+	{"\\*",'*',5},						// mul
+	{"/",'/',5},						// div
+	{"	+",NOTYPE,0},					// tabs
+	{" +",NOTYPE,0},					// spaces
+	{"\\+",'+',4},						// plus
+	{"-",'-',4},						// sub
+	{"==", EQ,3},						// equal
+	{"&&",AND,2},						// and
+	{"\\|\\|",OR,1},						// or
+	{"\\(",'(',7},                        // left bracket   
+	{"\\)",')',7},                        // right bracket 
 };
+
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
 
@@ -49,7 +54,7 @@ void init_regex() {
 }
 
 typedef struct token {
-	int type;
+	int type,priority;
 	char str[32];
 } Token;
 
@@ -95,14 +100,11 @@ static bool make_token(char *e) {
 	return true; 
 }
 
-uint32_t expr(char *e, bool *success) {
+uint32_t expr(char *e,bool *success) {
 	if(!make_token(e)) {
-		*success = false;
+		*success=false;
 		return 0;
 	}
-
-	/* TODO: Insert codes to evaluate the expression. */
-	panic("please implement me");
+	*success=true;
 	return 0;
 }
-

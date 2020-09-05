@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
 
 	/* Initialize the virtual computer system. */
 	restart();
-
+	
 	/* Receive commands from user. */
 	ui_mainloop();
 
