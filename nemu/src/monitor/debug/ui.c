@@ -49,8 +49,8 @@ static int cmd_info(char *args) {
 	}
 	switch(args[0]) {
 		case('r'):
-			for(i=0;i<8;i++) printf("%s 0x%x\n",regsl[i],reg_l(i));
-			printf("eip 0x%x\n",cpu.eip);
+			for(i=0;i<8;i++) printf("%s 0x%8x\n",regsl[i],reg_l(i));
+			printf("eip 0x%8x\n",cpu.eip);
 			break;
 		default:printf("illegel command!\n");
 	}
