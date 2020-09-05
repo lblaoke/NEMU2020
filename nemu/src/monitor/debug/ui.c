@@ -28,31 +28,41 @@ char* rl_gets() {
 }
 
 static int cmd_help(char *args);
-
 static int cmd_c(char *args) {
 	cpu_exec(-1);
 	return 0;
 }
-
 static int cmd_q(char *args) {
 	return -1;
 }
-
 static int cmd_si(char *args) {
 	int num=1;
 	if(args) sscanf(args,"%d",&num);
 	cpu_exec(num);
 	return 0;
 }
-
-static int cmd_info(char *args) {return  0;}
-static int cmd_x(char *args) {return  0;}
-static int cmd_p(char *args) {return  0;}
-static int cmd_b(char *args) {return  0;}
-static int cmd_w(char *args) {return  0;}
-static int cmd_d(char *args) {return  0;}
-static int cmd_bt(char *args) {return  0;}
-static int cmd_cache(char *args) {return  0;}
+static int cmd_info(char *args) {
+	int i;
+	if(!args) {
+		printf("command required!\n");
+		return 0;
+	}
+	switch(args[0]) {
+		case('r'):
+			for(i=0;i<8;i++) printf("%s 0x%x\n",regsl[i],reg_l(i));
+			printf("eip 0x%x\n",cpu.eip);
+			break;
+		default:printf("illegel command!\n");
+	}
+	return 0;
+}
+static int cmd_x(char *args) {return 0;}
+static int cmd_p(char *args) {return 0;}
+static int cmd_b(char *args) {return 0;}
+static int cmd_w(char *args) {return 0;}
+static int cmd_d(char *args) {return 0;}
+static int cmd_bt(char *args) {return 0;}
+static int cmd_cache(char *args) {return 0;}
 
 static struct {
 	char *name;
