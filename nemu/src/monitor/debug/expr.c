@@ -71,7 +71,7 @@ static bool make_token(char *e) {
 	while(e[position] != '\0') {
 		/* Try all rules one by one. */
 		for(i = 0; i < NR_REGEX; i ++) {
-			if(regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
+			if(!(regexec(re+i,e+position,1,&pmatch,0) || pmatch.rm_so)) {
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
 
@@ -117,18 +117,21 @@ uint32_t eval(int l,int r,bool *success) {
 	l_braket=!strcmp(tokens[l].str,"(");
 	r_braket=!strcmp(tokens[r].str,")");
 	if(l_braket ^ r_braket) return 0;
-	if(!strcmp(tokens[l].str,")") || !strcmp(tokens[r].str,"(")) return 0;
+	if(!(strcmp(tokens[l].str,")") && strcmp(tokens[r].str,"("))) return 0;
 	if(l+1==r && l_braket && r_braket) return 0;
 
 	*success=true;
 	if(l==r) {
-		if(tokens[l].type==NUMBER) sscanf(tokens[l].str,"%d",&result);
-		else if(tokens[l].type==HNUMBER) sscanf(tokens[l].str,"%x",&result);
+		if(tokens[l].type==HNUMBER) sscanf(tokens[l].str,"%x",&result);
 		else if(tokens[l].type==REGISTER) {
-			for(i=0;i<8;i++) if(!strcmp(tokens[l].str,regsl[i])) break;
-			if(i<8) result=reg_l(i);
-			else *success=false;
+			if(!strcmp(tokens[l].str,"eip")) result=cpu.eip;
+			else {
+				for(i=0;i<8;i++) if(!strcmp(tokens[l].str,regsl[i])) break;
+				if(i<8) result=reg_l(i);
+				else *success=false;
+			}
 		}
+		else if(tokens[l].type==NUMBER) sscanf(tokens[l].str,"%d",&result);
 		else *success=false;
 		return result;
 	}
