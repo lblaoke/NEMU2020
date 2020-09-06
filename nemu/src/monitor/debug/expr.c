@@ -108,14 +108,40 @@ static bool make_token(char *e) {
 
 	return true; 
 }
-uint32_t eval(int l,int r) {
+uint32_t eval(int l,int r,bool *success) {
+	uint32_t result=0;
+	int l_braket,r_braket;
+
+	*success=false;
+	if(l>r) return 0;
+	l_braket=!strcmp(tokens[l].str,"(");
+	r_braket=!strcmp(tokens[r].str,")");
+	if(l_braket ^ r_braket) return 0;
+	if(!strcmp(tokens[l].str,")") || !strcmp(tokens[r].str,"(")) return 0;
+	if(l+1==r && l_braket && r_braket) return 0;
+
+	*success=true;
+	if(l==r) {
+		if(tokens[l].type==NUMBER) sscanf(tokens[l].str,"%d",&result);
+		else if(tokens[l].type==HNUMBER) sscanf(tokens[l].str,"%x",&result);
+		else if(tokens[l].type==REGISTER) {
+			result=0;
+		}
+		else *success=false;
+		return result;
+	}
+
+	if(l_braket && r_braket) return eval(l+1,r-1,success);
+	
 	return 0;
 }
 uint32_t expr(char *e,bool *success) {
+	uint32_t result;
 	if(!make_token(e)) {
 		*success=false;
 		return 0;
 	}
-	*success=true;
-	return eval(0,nr_token-1);
+	result=eval(0,nr_token-1,success);
+	if(success) return result;
+	return 0;
 }
