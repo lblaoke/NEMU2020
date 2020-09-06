@@ -67,7 +67,16 @@ static int cmd_x(char *args) {
 	printf("\n");
 	return 0;
 }
-static int cmd_p(char *args) {return 0;}
+static int cmd_p(char *args) {
+	bool success;
+	uint32_t result=expr(args,&success);
+	if(success) printf("0x%08x\n",result);
+	else {
+		printf("illegel expression!\n");
+		assert(0);
+	}
+	return 0;
+}
 static int cmd_b(char *args) {return 0;}
 static int cmd_w(char *args) {return 0;}
 static int cmd_d(char *args) {return 0;}
