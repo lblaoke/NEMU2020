@@ -114,6 +114,10 @@ uint32_t expr(char *e,bool *success) {
 		*success=false;
 		return 0;
 	}
+
+	int i;
+	for(i=0;i<nr_token;i++) printf("%s",tokens[i].str);
+
 	*success=true;
 	return 0;
 }
