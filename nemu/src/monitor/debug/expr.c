@@ -108,16 +108,14 @@ static bool make_token(char *e) {
 
 	return true; 
 }
-
+uint32_t eval(int l,int r) {
+	return 0;
+}
 uint32_t expr(char *e,bool *success) {
 	if(!make_token(e)) {
 		*success=false;
 		return 0;
 	}
-
-	int i;
-	for(i=0;i<nr_token;i++) printf("%s",tokens[i].str);
-
 	*success=true;
-	return 0;
+	return eval(0,nr_token-1);
 }
