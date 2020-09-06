@@ -110,7 +110,7 @@ static bool make_token(char *e) {
 }
 uint32_t eval(int l,int r,bool *success) {
 	uint32_t result=0;
-	int l_braket,r_braket;
+	int i,l_braket,r_braket;
 
 	*success=false;
 	if(l>r) return 0;
@@ -125,14 +125,16 @@ uint32_t eval(int l,int r,bool *success) {
 		if(tokens[l].type==NUMBER) sscanf(tokens[l].str,"%d",&result);
 		else if(tokens[l].type==HNUMBER) sscanf(tokens[l].str,"%x",&result);
 		else if(tokens[l].type==REGISTER) {
-			result=0;
+			for(i=0;i<8;i++) if(!strcmp(tokens[l].str,regsl[i])) break;
+			if(i<8) result=reg_l(i);
+			else *success=false;
 		}
 		else *success=false;
 		return result;
 	}
 
 	if(l_braket && r_braket) return eval(l+1,r-1,success);
-	
+
 	return 0;
 }
 uint32_t expr(char *e,bool *success) {
