@@ -162,8 +162,8 @@ uint32_t eval(int l,int r) {
 	} else switch(tokens[min_index].type) {
 		case('+'): return l_operand+r_operand;
 		case('-'): return l_operand-r_operand;
-		case('*'): return l_operand*r_operand;
-		case('/'): return l_operand/r_operand;
+		case('*'): return (uint32_t)((int)l_operand*(int)r_operand);
+		case('/'): return (uint32_t)((int)l_operand/(int)r_operand);
 		case(AND): return l_operand && r_operand;
 		case(OR): return l_operand+r || r_operand;
 		case(EQ): return l_operand+r==r_operand;
