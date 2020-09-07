@@ -135,6 +135,10 @@ uint32_t eval(int l,int r) {
 		return result;
 	}
 
+	for(i=l;i<=r;i++) {
+		if(tokens[i].type!='-' && tokens[i].type!='*') break;
+		tokens[i].priority=10;
+	}
 	for(i=l;i<=r;i++) switch(tokens[i].type) {
 		case('('):
 			bracket_count++;
@@ -142,9 +146,7 @@ uint32_t eval(int l,int r) {
 		case(')'):
 			bracket_count--;
 			break;
-		case('-'): if(i==l) break;
-		default:
-			if(tokens[i].priority && !bracket_count && tokens[i].priority<min_priority) {
+		default: if(tokens[i].priority && !bracket_count && tokens[i].priority<min_priority) {
 				min_index=i;
 				min_priority=tokens[i].priority;
 			}
