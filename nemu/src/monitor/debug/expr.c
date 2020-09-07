@@ -110,19 +110,14 @@ static bool make_token(char *e) {
 }
 uint32_t eval(int l,int r) {
 	uint32_t result=0,l_operand,r_operand;
-	int i,min_index=l,min_priority=10,l_braket,r_braket;
+	int i,min_index=l,min_priority=10;
 
 	if(l>r) assert(0);
-	l_braket=!strcmp(tokens[l].str,"(");
-	r_braket=!strcmp(tokens[r].str,")");
-	if(l_braket ^ r_braket) assert(0);
-	if(!(strcmp(tokens[l].str,")") && strcmp(tokens[r].str,"("))) assert(0);
-	while(l_braket && r_braket) {
+	if(!(strcmp(tokens[l].str,")") || strcmp(tokens[r].str,"("))) assert(0);
+	while(!(strcmp(tokens[l].str,"(") || strcmp(tokens[r].str,")"))) {
 		l++;
 		r--;
 		if(l>r) assert(0);
-		l_braket=!strcmp(tokens[l].str,"(");
-		r_braket=!strcmp(tokens[r].str,")");
 	}
 
 	if(l==r) {
