@@ -124,10 +124,20 @@ uint32_t eval(int l,int r) {
 		if(tokens[l].type==HNUMBER) sscanf(tokens[l].str,"%x",&result);
 		else if(tokens[l].type==REGISTER) {
 			if(!strcmp(tokens[l].str,"eip")) result=cpu.eip;
-			else {
-				for(i=0;i<8;i++) if(!strcmp(tokens[l].str,regsl[i])) break;
+			else if(strlen(tokens[l].str)==3) {
+				for(i=R_EAX;i<=R_EDI;i++) if(!strcmp(tokens[l].str,regsl[i])) break;
 				if(i<8) result=reg_l(i);
 				else assert(0);
+			} else if(strlen(tokens[l].str)==2) {
+				if(tokens[l].str[1]=='x' || tokens[l].str[1]=='p' || tokens[l].str[1]=='i') {
+					for(i=R_AX;i<R_DI;i++) if(!strcmp(tokens[l].str,regsw[i])) break;
+					if(i<8) result=reg_w(i);
+					else assert(0);
+				} else if(tokens[l].str[1]=='l' || tokens[l].str[1]=='h') {
+					for(i=R_AL;i<R_BH;i++) if(!strcmp(tokens[l].str,regsb[i])) break;
+					if(i<8) result=reg_b(i);
+					else assert(0);
+				}
 			}
 		}
 		else if(tokens[l].type==NUMBER) sscanf(tokens[l].str,"%d",&result);
