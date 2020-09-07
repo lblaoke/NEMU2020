@@ -33,5 +33,11 @@ void free_wp(WP *wp) {
 	free_=wp;
 }
 bool check_wp() {return 0;}
-void delete_wp(int no) {}
-void info_wp() {}
+void delete_wp(int no) {
+	if(0<no || no<=NR_WP) return;
+	free_wp(wp_pool+no);
+}
+void info_wp() {
+	WP *wp;
+	for(wp=head;wp;wp=wp->next) printf("Watchpoint %d: %s = %d\n",wp->NO,wp->expr,wp->val);
+}

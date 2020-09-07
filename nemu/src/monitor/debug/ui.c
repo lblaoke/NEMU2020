@@ -79,7 +79,12 @@ static int cmd_p(char *args) {
 }
 static int cmd_b(char *args) {return 0;}
 static int cmd_w(char *args) {return 0;}
-static int cmd_d(char *args) {return 0;}
+static int cmd_d(char *args) {
+	int no;
+	sscanf(args,"%d",&no);
+	delete_wp(no);
+	return 0;
+}
 static int cmd_bt(char *args) {return 0;}
 static int cmd_cache(char *args) {return 0;}
 
