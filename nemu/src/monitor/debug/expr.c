@@ -109,8 +109,8 @@ static bool make_token(char *e) {
 	return true; 
 }
 uint32_t eval(int l,int r,bool *success) {
-	uint32_t result=0;
-	int i,l_braket,r_braket;
+	uint32_t result=0,l_operand,r_operand;
+	int i,min_index=l,min_priority=10,l_braket,r_braket;
 
 	*success=false;
 	if(l>r) return 0;
@@ -142,6 +142,26 @@ uint32_t eval(int l,int r,bool *success) {
 		return result;
 	}
 
+	for(i=l;i<=r;i++) if(tokens[i].priority<min_priority) {
+		min_index=i;
+		min_priority=tokens[i].priority;
+	}
+	l_operand=eval(l,min_index-1,success);
+	if(!*success) return 0;
+	r_operand=eval(min_index+1,r,success);
+	if(!*success) return 0;
+	switch(tokens[min_index].type) {
+		case('+'):return l_operand+r_operand;
+		case('-'):return l_operand-r_operand;
+		case('*'):return l_operand*r_operand;
+		case('/'):return l_operand/r_operand;
+		case(AND):return l_operand && r_operand;
+		case(OR):return l_operand+r || r_operand;
+		case(EQ):return l_operand+r==r_operand;
+		case(NEQ):return l_operand+r!=r_operand;
+	}
+
+	*success=false;
 	return 0;
 }
 uint32_t expr(char *e,bool *success) {
@@ -151,6 +171,7 @@ uint32_t expr(char *e,bool *success) {
 		return 0;
 	}
 	result=eval(0,nr_token-1,success);
+
 	if(success) return result;
 	return 0;
 }
