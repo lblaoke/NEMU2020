@@ -118,6 +118,13 @@ uint32_t eval(int l,int r,bool *success) {
 	r_braket=!strcmp(tokens[r].str,")");
 	if(l_braket ^ r_braket) return 0;
 	if(!(strcmp(tokens[l].str,")") && strcmp(tokens[r].str,"("))) return 0;
+	while(l_braket && r_braket) {
+		l++;
+		r--;
+		if(l>r) return 0;
+		l_braket=!strcmp(tokens[l].str,"(");
+		r_braket=!strcmp(tokens[r].str,")");
+	}
 
 	*success=true;
 	if(l==r) {
@@ -133,17 +140,6 @@ uint32_t eval(int l,int r,bool *success) {
 		else if(tokens[l].type==NUMBER) sscanf(tokens[l].str,"%d",&result);
 		else *success=false;
 		return result;
-	}
-
-	while(l_braket && r_braket) {
-		l++;
-		r--;
-		if(l>r) {
-			*success=false;
-			return 0;
-		}
-		l_braket=!strcmp(tokens[l].str,"(");
-		r_braket=!strcmp(tokens[r].str,")");
 	}
 
 	return 0;
