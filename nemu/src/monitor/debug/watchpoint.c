@@ -17,18 +17,22 @@ void init_wp_pool() {
 	head = NULL;
 	free_ = wp_pool;
 }
-WP* new_wp () {
+WP* new_wp() {
 	WP *wp=free_;
 	if(!free_) return NULL;
 	free_=free_->next;
 	wp->next=head;
-	return head=wp;
+	head=wp;
+	return wp;
 }
 void free_wp(WP *wp) {
 	WP *pre;
-	for(pre=head;pre && pre->next!=wp;pre=pre->next);
-	if(!pre) return;
-	pre->next=wp->next;
+	if(wp==head) head=head->next;
+	else {
+		for(pre=head;pre && pre->next!=wp;pre=pre->next);
+		if(!pre) return;
+		pre->next=wp->next;
+	}
 	wp->next=free_;
 	free_=wp;
 }
