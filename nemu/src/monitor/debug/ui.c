@@ -64,7 +64,14 @@ static int cmd_info(char *args) {
 static int cmd_x(char *args) {
 	int i,n;
 	swaddr_t addr;
-	sscanf(args,"%d %x",&n,&addr);
+	bool suc;
+
+	args=strtok(args," ");
+	sscanf(args,"%d",&n);
+	args=args+strlen(args)+1;
+	addr=expr(args,&suc);
+	if (!suc)assert (1);
+
 	printf("0x%08x:\n",addr);
 	for(i=0;i<n;i++,addr+=4) printf("0x%08x ",swaddr_read(addr,4));
 	printf("\n");
