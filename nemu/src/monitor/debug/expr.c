@@ -148,8 +148,6 @@ uint32_t eval(int l,int r) {
 			}
 	}
 
-	printf("%s ",tokens[min_index].str);
-
 	l_operand=eval(l,min_index-1);
 	r_operand=eval(min_index+1,r);
 	if(min_index==l) switch(tokens[min_index].type) {
