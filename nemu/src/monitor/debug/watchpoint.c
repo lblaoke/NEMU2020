@@ -55,8 +55,9 @@ bool check_wp() {
 	return true;
 }
 void delete_wp(int no) {
+	WP *wp=wp_pool+no;
 	if(no<0 || NR_WP<=no) return;
-	free_wp(wp_pool+no);
+	free_wp(wp);
 }
 void info_wp() {
 	WP *wp;
