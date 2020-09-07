@@ -173,8 +173,8 @@ uint32_t eval(int l,int r) {
 		case('/'): return (uint32_t)((int)l_operand/(int)r_operand);
 		case(AND): return (uint32_t)(l_operand && r_operand);
 		case(OR): return (uint32_t)(l_operand || r_operand);
-		case(EQ): return (uint32_t)(l_operand+r==r_operand);
-		case(NEQ): return (uint32_t)(l_operand+r!=r_operand);
+		case(EQ): return (uint32_t)(l_operand==r_operand);
+		case(NEQ): return (uint32_t)(l_operand!=r_operand);
 	}
 
 	assert(0);
