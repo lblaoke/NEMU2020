@@ -139,6 +139,7 @@ uint32_t eval(int l,int r) {
 		min_index=i;
 		min_priority=tokens[i].priority;
 	}
+	printf("%s\n",tokens[min_index].str);
 	l_operand=eval(l,min_index-1);
 	r_operand=eval(min_index+1,r);
 	switch(tokens[min_index].type) {
@@ -153,7 +154,7 @@ uint32_t eval(int l,int r) {
 	}
 
 	assert(0);
-	return 0;
+	return result;
 }
 uint32_t expr(char *e,bool *success) {
 	*success=make_token(e);
