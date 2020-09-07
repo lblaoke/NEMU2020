@@ -10,7 +10,7 @@ void init_wp_pool() {
 	int i;
 	for(i = 0; i < NR_WP; i ++) {
 		wp_pool[i].NO = i;
-		wp_pool[i].next = &wp_pool[i + 1];
+		wp_pool[i].next = wp_pool+i+1;
 	}
 	wp_pool[NR_WP - 1].next = NULL;
 
@@ -32,7 +32,28 @@ void free_wp(WP *wp) {
 	wp->next=free_;
 	free_=wp;
 }
-bool check_wp() {return 0;}
+bool check_wp() {
+	WP *wp;
+	uint32_t value;
+	bool success;
+	for(wp=head;wp;wp=wp->next) {
+		value=expr(wp->expr,&success);
+		if(!success) assert(0);
+		if(value!=wp->val) {
+			if(wp->b) {
+				printf("Hit breakpoint %d at 0x%08x\n",wp->b,cpu.eip);
+				wp=wp->next;
+				continue;
+			}
+			printf("Watchpoint %d: %s\n",wp->NO,wp->expr);
+			printf("Old value = %d\n",wp->val);
+			printf("New value = %d\n",value);
+			wp->val=value;
+			return false;
+		}
+	}
+	return true;
+}
 void delete_wp(int no) {
 	if(0<no || no<=NR_WP) return;
 	free_wp(wp_pool+no);
