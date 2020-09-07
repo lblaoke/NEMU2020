@@ -118,7 +118,6 @@ uint32_t eval(int l,int r,bool *success) {
 	r_braket=!strcmp(tokens[r].str,")");
 	if(l_braket ^ r_braket) return 0;
 	if(!(strcmp(tokens[l].str,")") && strcmp(tokens[r].str,"("))) return 0;
-	if(l+1==r && l_braket && r_braket) return 0;
 
 	*success=true;
 	if(l==r) {
@@ -136,7 +135,16 @@ uint32_t eval(int l,int r,bool *success) {
 		return result;
 	}
 
-	if(l_braket && r_braket) return eval(l+1,r-1,success);
+	while(l_braket && r_braket) {
+		l++;
+		r--;
+		if(l>r) {
+			*success=false;
+			return 0;
+		}
+		l_braket=!strcmp(tokens[l].str,"(");
+		r_braket=!strcmp(tokens[r].str,")");
+	}
 
 	return 0;
 }
