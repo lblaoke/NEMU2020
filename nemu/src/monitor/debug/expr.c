@@ -155,7 +155,7 @@ uint32_t eval(int l,int r) {
 	r_operand=eval(min_index+1,r);
 	if(min_index==l) switch(tokens[min_index].type) {
 		case('-'): return (~r_operand)+1;
-		case('*'): return swaddr_read(r_operand,4);
+		case('*'): return swaddr_read(r_operand,8);
 	} else switch(tokens[min_index].type) {
 		case('+'): return l_operand+r_operand;
 		case('-'): return l_operand-r_operand;
