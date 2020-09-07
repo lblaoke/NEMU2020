@@ -135,10 +135,6 @@ uint32_t eval(int l,int r) {
 		return result;
 	}
 
-	for(i=l;i<=r;i++) {
-		if(tokens[i].type!='-' && tokens[i].type!='*') break;
-		tokens[i].priority=10;
-	}
 	for(i=l;i<=r;i++) switch(tokens[i].type) {
 		case('('):
 			bracket_count++;
@@ -158,6 +154,7 @@ uint32_t eval(int l,int r) {
 	r_operand=eval(min_index+1,r);
 	if(min_index==l) switch(tokens[min_index].type) {
 		case('-'): return (~r_operand)+1;
+		case('!'): return !r_operand;
 		case('*'): return swaddr_read(r_operand,4);
 	} else switch(tokens[min_index].type) {
 		case('+'): return l_operand+r_operand;
@@ -173,8 +170,25 @@ uint32_t eval(int l,int r) {
 	assert(0);
 	return result;
 }
+int check_op(int p) {
+	if(p<0 || p>=nr_token) return 0;
+	if(tokens[p].type=='-' || tokens[p].type=='!' || tokens[p].type=='*') return 3;
+	if(1<=tokens[p].priority && tokens[p].priority<=6) return 2;
+	return 1;
+}
 uint32_t expr(char *e,bool *success) {
+	int i,op;
 	*success=make_token(e);
-	if(*success) return eval(0,nr_token-1);
-	return 0;
+	if(!*success) return 0;
+
+	op=check_op(0);
+	if(op==2) assert(0);
+	if(op==3) tokens[0].priority=10;
+	for(i=1;i<nr_token;i++) if(check_op(i-1)>1) {
+		op=check_op(i);
+		if(op==2) assert(0);
+		if(op==3) tokens[i].priority=10;
+	}
+
+	return eval(0,nr_token-1);
 }
