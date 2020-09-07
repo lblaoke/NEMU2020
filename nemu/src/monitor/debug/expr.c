@@ -75,7 +75,7 @@ static bool make_token(char *e) {
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
 
-				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
+				//Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
 				
 				position += substr_len;
 				
@@ -158,7 +158,7 @@ uint32_t eval(int l,int r) {
 			}
 	}
 
-	printf("%s ",tokens[min_index].str);
+	//printf("%s ",tokens[min_index].str);
 
 	l_operand=eval(l,min_index-1);
 	r_operand=eval(min_index+1,r);
