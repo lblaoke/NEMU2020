@@ -112,7 +112,7 @@ uint32_t eval(int l,int r) {
 	uint32_t result=0,l_operand,r_operand;
 	int i,min_index=l,min_priority=10,bracket_count=0;
 
-	if(l>r) assert(0);
+	if(l>r) return result;
 	if(tokens[l].type==')' || tokens[r].type=='(') assert(0);
 	while(tokens[l].type=='(' && tokens[r].type==')') {
 		l++;
@@ -149,7 +149,7 @@ uint32_t eval(int l,int r) {
 			}
 	}
 
-	printf("%s\n",tokens[min_index].str);
+	printf("%s ",tokens[min_index].str);
 
 	l_operand=eval(l,min_index-1);
 	r_operand=eval(min_index+1,r);
