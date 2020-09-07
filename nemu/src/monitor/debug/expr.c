@@ -183,11 +183,11 @@ uint32_t expr(char *e,bool *success) {
 
 	op=check_op(0);
 	if(op==2) assert(0);
-	if(op==3) tokens[0].priority=10;
+	if(op==3) tokens[0].priority=6;
 	for(i=1;i<nr_token;i++) if(check_op(i-1)>1) {
 		op=check_op(i);
 		if(op==2) assert(0);
-		if(op==3) tokens[i].priority=10;
+		if(op==3) tokens[i].priority=6;
 	}
 
 	return eval(0,nr_token-1);
