@@ -142,6 +142,7 @@ uint32_t eval(int l,int r) {
 		case(')'):
 			bracket_count--;
 			break;
+		case('-'): if(i==l) break;
 		default:
 			if(tokens[i].priority && !bracket_count && tokens[i].priority<min_priority) {
 				min_index=i;
