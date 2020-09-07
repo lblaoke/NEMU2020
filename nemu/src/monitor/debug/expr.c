@@ -80,7 +80,7 @@ static bool make_token(char *e) {
 				position += substr_len;
 				
 				switch(rules[i].token_type) {
-					case(NOTYPE):break;
+					case(NOTYPE): break;
 					case(REGISTER):
 						tokens[nr_token].type=rules[i].token_type;
 						tokens[nr_token].priority=rules[i].priority;
@@ -153,15 +153,18 @@ uint32_t eval(int l,int r) {
 
 	l_operand=eval(l,min_index-1);
 	r_operand=eval(min_index+1,r);
-	switch(tokens[min_index].type) {
-		case('+'):return l_operand+r_operand;
-		case('-'):return l_operand-r_operand;
-		case('*'):return l_operand*r_operand;
-		case('/'):return l_operand/r_operand;
-		case(AND):return l_operand && r_operand;
-		case(OR):return l_operand+r || r_operand;
-		case(EQ):return l_operand+r==r_operand;
-		case(NEQ):return l_operand+r!=r_operand;
+	if(min_index==l) switch(tokens[min_index].type) {
+		case('-'): return (~r_operand)+1;
+		case('*'): return swaddr_read(r_operand,4);
+	} else switch(tokens[min_index].type) {
+		case('+'): return l_operand+r_operand;
+		case('-'): return l_operand-r_operand;
+		case('*'): return l_operand*r_operand;
+		case('/'): return l_operand/r_operand;
+		case(AND): return l_operand && r_operand;
+		case(OR): return l_operand+r || r_operand;
+		case(EQ): return l_operand+r==r_operand;
+		case(NEQ): return l_operand+r!=r_operand;
 	}
 
 	assert(0);
