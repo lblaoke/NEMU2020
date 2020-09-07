@@ -85,7 +85,15 @@ static int cmd_p(char *args) {
 	return 0;
 }
 static int cmd_b(char *args) {return 0;}
-static int cmd_w(char *args) {return 0;}
+static int cmd_w(char *args) {
+	bool success;
+	WP *wp=new_wp();
+	strcpy(wp->expr,args);
+	wp->val=expr(args,&success);
+	if(!success) assert(0);
+	printf("%s = %d\n",args,wp->val);
+	return 0;
+}
 static int cmd_d(char *args) {
 	int no;
 	sscanf(args,"%d",&no);
