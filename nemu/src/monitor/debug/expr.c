@@ -108,25 +108,23 @@ static bool make_token(char *e) {
 
 	return true; 
 }
-uint32_t eval(int l,int r,bool *success) {
+uint32_t eval(int l,int r) {
 	uint32_t result=0,l_operand,r_operand;
 	int i,min_index=l,min_priority=10,l_braket,r_braket;
 
-	*success=false;
-	if(l>r) return 0;
+	if(l>r) assert(0);
 	l_braket=!strcmp(tokens[l].str,"(");
 	r_braket=!strcmp(tokens[r].str,")");
-	if(l_braket ^ r_braket) return 0;
-	if(!(strcmp(tokens[l].str,")") && strcmp(tokens[r].str,"("))) return 0;
+	if(l_braket ^ r_braket) assert(0);
+	if(!(strcmp(tokens[l].str,")") && strcmp(tokens[r].str,"("))) assert(0);
 	while(l_braket && r_braket) {
 		l++;
 		r--;
-		if(l>r) return 0;
+		if(l>r) assert(0);
 		l_braket=!strcmp(tokens[l].str,"(");
 		r_braket=!strcmp(tokens[r].str,")");
 	}
 
-	*success=true;
 	if(l==r) {
 		if(tokens[l].type==HNUMBER) sscanf(tokens[l].str,"%x",&result);
 		else if(tokens[l].type==REGISTER) {
@@ -134,22 +132,20 @@ uint32_t eval(int l,int r,bool *success) {
 			else {
 				for(i=0;i<8;i++) if(!strcmp(tokens[l].str,regsl[i])) break;
 				if(i<8) result=reg_l(i);
-				else *success=false;
+				else assert(0);
 			}
 		}
 		else if(tokens[l].type==NUMBER) sscanf(tokens[l].str,"%d",&result);
-		else *success=false;
+		else assert(0);
 		return result;
 	}
 
-	for(i=l;i<=r;i++) if(tokens[i].priority<min_priority) {
+	for(i=l;i<=r;i++) if(tokens[i].priority && tokens[i].priority<min_priority) {
 		min_index=i;
 		min_priority=tokens[i].priority;
 	}
-	l_operand=eval(l,min_index-1,success);
-	if(!*success) return 0;
-	r_operand=eval(min_index+1,r,success);
-	if(!*success) return 0;
+	l_operand=eval(l,min_index-1);
+	r_operand=eval(min_index+1,r);
 	switch(tokens[min_index].type) {
 		case('+'):return l_operand+r_operand;
 		case('-'):return l_operand-r_operand;
@@ -161,17 +157,11 @@ uint32_t eval(int l,int r,bool *success) {
 		case(NEQ):return l_operand+r!=r_operand;
 	}
 
-	*success=false;
+	assert(0);
 	return 0;
 }
 uint32_t expr(char *e,bool *success) {
-	uint32_t result;
-	if(!make_token(e)) {
-		*success=false;
-		return 0;
-	}
-	result=eval(0,nr_token-1,success);
-
-	if(success) return result;
+	*success=make_token(e);
+	if(*success) return eval(0,nr_token-1);
 	return 0;
 }

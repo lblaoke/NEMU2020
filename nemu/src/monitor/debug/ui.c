@@ -71,10 +71,7 @@ static int cmd_p(char *args) {
 	bool success;
 	uint32_t result=expr(args,&success);
 	if(success) printf("0x%08x\n",result);
-	else {
-		printf("illegel expression!\n");
-		assert(0);
-	}
+	else assert(0);
 	return 0;
 }
 static int cmd_b(char *args) {return 0;}
