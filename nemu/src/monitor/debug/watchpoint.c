@@ -1,6 +1,6 @@
 #include "monitor/watchpoint.h"
 #include "monitor/expr.h"
-
+#include "nemu.h"
 #define NR_WP 32
 
 static WP wp_pool[NR_WP];
@@ -17,7 +17,21 @@ void init_wp_pool() {
 	head = NULL;
 	free_ = wp_pool;
 }
-
-/* TODO: Implement the functionality of watchpoint */
-
-
+WP* new_wp () {
+	WP *wp=free_;
+	if(!free_) return NULL;
+	free_=free_->next;
+	wp->next=head;
+	return head=wp;
+}
+void free_wp(WP *wp) {
+	WP *pre;
+	for(pre=head;pre && pre->next!=wp;pre=pre->next);
+	if(!pre) return;
+	pre->next=wp->next;
+	wp->next=free_;
+	free_=wp;
+}
+bool check_wp() {return 0;}
+void delete_wp(int no) {}
+void info_wp() {}
