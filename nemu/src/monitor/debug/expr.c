@@ -115,10 +115,13 @@ uint32_t eval(int l,int r) {
 	if(l>r) return result;
 	if(tokens[l].type==')' || tokens[r].type=='(') assert(0);
 	while(tokens[l].type=='(' && tokens[r].type==')') {
+		for(i=l+1;i<r;i++) if(tokens[i].type==')' || tokens[i].type=='(') goto L;
 		l++;
 		r--;
 		if(l>r) assert(0);
 	}
+
+	L:assert(1);
 
 	if(l==r) {
 		if(tokens[l].type==HNUMBER) sscanf(tokens[l].str,"%x",&result);
@@ -157,6 +160,7 @@ uint32_t eval(int l,int r) {
 				min_priority=tokens[i].priority;
 			}
 	}
+	if(bracket_count) assert(0);
 
 	//printf("%s ",tokens[min_index].str);
 
