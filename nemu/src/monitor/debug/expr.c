@@ -110,7 +110,7 @@ static bool make_token(char *e) {
 }
 uint32_t eval(int l,int r) {
 	uint32_t result=0,l_operand,r_operand;
-	int i,min_index=l,min_priority=10,bracket_count=0;
+	int i,min_index=r,min_priority=10,bracket_count=0;
 
 	if(l>r) return result;
 	if(tokens[l].type==')' || tokens[r].type=='(') assert(0);
@@ -140,12 +140,12 @@ uint32_t eval(int l,int r) {
 		return result;
 	}
 
-	for(i=l;i<=r;i++) switch(tokens[i].type) {
+	for(i=r;i>=l;i--) switch(tokens[i].type) {
 		case('('):
-			bracket_count++;
+			bracket_count--;
 			break;
 		case(')'):
-			bracket_count--;
+			bracket_count++;
 			break;
 		default: if(tokens[i].priority && !bracket_count && tokens[i].priority<min_priority) {
 				min_index=i;
@@ -156,7 +156,7 @@ uint32_t eval(int l,int r) {
 
 	//printf("%s ",tokens[min_index].str);
 
-	if(tokens[l].type=='(' && tokens[r].type==')' && min_index==l) return eval(l+1,r-1);
+	if(tokens[l].type=='(' && tokens[r].type==')' && min_index==r) return eval(l+1,r-1);
 
 	l_operand=eval(l,min_index-1);
 	r_operand=eval(min_index+1,r);
