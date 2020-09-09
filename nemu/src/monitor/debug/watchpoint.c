@@ -45,11 +45,6 @@ bool check_wp() {
 		value=expr(wp->expr,&success);
 		if(!success) assert(0);
 		if(value!=wp->val) {
-			if(wp->b) {
-				printf("Hit breakpoint %d at 0x%08x\n",wp->b,cpu.eip);
-				wp=wp->next;
-				continue;
-			}
 			printf("Watchpoint %d: %s\n",wp->NO,wp->expr);
 			printf("Old value = %d\n",wp->val);
 			printf("New value = %d\n",value);
