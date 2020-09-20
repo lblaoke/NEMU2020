@@ -2,6 +2,7 @@
 #define __REG_H__
 
 #include "common.h"
+#include "../../../lib-common/x86-inc/cpu.h"
 
 enum { R_EAX, R_ECX, R_EDX, R_EBX, R_ESP, R_EBP, R_ESI, R_EDI };
 enum { R_AX, R_CX, R_DX, R_BX, R_SP, R_BP, R_SI, R_DI };
@@ -13,19 +14,87 @@ enum { R_AL, R_CL, R_DL, R_BL, R_AH, R_CH, R_DH, R_BH };
  * cpu.gpr[1]._8[1], we will get the 'ch' register. Hint: Use `union'.
  * For more details about the register encoding scheme, see i386 manual.
  */
+struct SREG{
+		uint16_t selector;
+		union {
+			struct {
+				uint32_t seg_base1 :16;
+				uint32_t seg_base2 :8;
+				uint32_t seg_base3 :8;
+			};
+			uint32_t seg_base;
+		};
+		union {
+			struct {
+				uint32_t seg_limit1 :16;
+				uint32_t seg_limit2 :4;
+				uint32_t seg_limit3 :12;
+			};
+			uint32_t seg_limit;
+		};
+};
 
 typedef struct {
+union {
 	union {
-		union {
-			uint32_t _32;
-			uint16_t _16;
-			uint8_t _8[2];
-		} gpr[8];
-		struct {uint32_t eax,ecx,edx,ebx,esp,ebp,esi,edi;};
+		uint32_t _32;
+		uint16_t _16;
+		uint8_t _8[2];
+	} gpr[8];
+
+	/* Do NOT change the order of the GPRs' definitions. */
+    	struct {
+		uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
+		swaddr_t eip;
+	union{
+		struct{
+			uint32_t CF:	1;
+			uint32_t :	1;
+			uint32_t PF:	1;
+			uint32_t :	1;
+			uint32_t AF:	1;
+			uint32_t :	1;
+			uint32_t ZF:	1;
+			uint32_t SF:	1;
+			uint32_t TF:	1;
+			uint32_t IF:	1;
+			uint32_t DF:	1;
+			uint32_t OF:	1;
+			uint32_t IOPL:	2;
+			uint32_t NT:	1;
+			uint32_t :	1;
+			uint32_t RF:	1;
+			uint32_t VM:	1;
+			uint32_t :	14;
+			};
+		uint32_t eflags;
+		};
 	};
-	swaddr_t eip;
+	bool INTR;
+};
+	
+struct GDTR{
+		uint32_t base_addr;
+		uint16_t seg_limit;
+}gdtr;
+struct IDTR{
+		uint32_t base_addr;
+		uint16_t seg_limit;
+}idtr;
+	CR0 cr0;
+	CR3 cr3;
+
+union {
+        	struct SREG sr[6];
+        	struct 
+        	{
+            struct SREG es, cs, ss, ds, fs, gs;
+        	};
+};
+
 
 } CPU_state;
+
 
 extern CPU_state cpu;
 
