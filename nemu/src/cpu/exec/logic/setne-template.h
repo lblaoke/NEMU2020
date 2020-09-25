@@ -3,8 +3,7 @@
 #define instr setne
 
 static void do_execute() {
-	if(cpu.ZF==0) OPERAND_W(op_src,1);
-	else OPERAND_W(op_src,0);
+	OPERAND_W(op_src,!cpu.ZF);
 
 	print_asm_no_template1();
 }
