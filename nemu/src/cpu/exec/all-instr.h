@@ -25,6 +25,7 @@
 #include "logic/shr.h"
 #include "logic/shrd.h"
 #include "logic/test.h"
+#include "logic/setne.h"
 
 #include "string/rep.h"
 
