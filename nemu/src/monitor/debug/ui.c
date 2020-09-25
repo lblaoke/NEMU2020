@@ -91,7 +91,7 @@ static int cmd_w(char *args) {
 	strcpy(wp->expr,args);
 	wp->val=expr(args,&success);
 	if(!success) assert(0);
-	printf("%s = %d\n",args,wp->val);
+	printf("%s = 0x%08x\n",args,wp->val);
 	return 0;
 }
 static int cmd_d(char *args) {
