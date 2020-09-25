@@ -46,8 +46,8 @@ bool check_wp() {
 		if(!success) assert(0);
 		if(value!=wp->val) {
 			printf("Watchpoint %d: %s\n",wp->NO,wp->expr);
-			printf("Old value = %d\n",wp->val);
-			printf("New value = %d\n",value);
+			printf("Old value = 0x%08x\n",wp->val);
+			printf("New value = 0x%08x\n",value);
 			wp->val=value;
 			return false;
 		}
