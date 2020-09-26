@@ -11,7 +11,7 @@ static void do_execute() {
 	cpu.ZF=!result;
 
 	int s1=op_dest->val>>len,s2=op_src->val>>len;
-    cpu.OF=(s1!=s2 && s2==cpu.SF) ;
+    cpu.OF=(s1!=s2 && s2==cpu.SF);
 
     OPERAND_W(op_dest,result);
 
