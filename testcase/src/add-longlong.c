@@ -23,7 +23,7 @@ int main() {
 	}
 */
 	//nemu_assert(loop == NR_DATA * NR_DATA);
-	nemu_assert(0x7fffffffffffffffLL+0x7fffffffffffffffLL == 0xfffffffffffffffeLL);
+	nemu_assert((long long)0x7fffffffffffffffLL+(long long)0x7fffffffffffffffLL == (long long)0xfffffffffffffffeLL);
 
 	return 0;
 }
