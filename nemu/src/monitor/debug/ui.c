@@ -80,7 +80,7 @@ static int cmd_x(char *args) {
 static int cmd_p(char *args) {
 	bool success;
 	uint32_t result=expr(args,&success);
-	if(success) printf("%d\n",result);
+	if(success) printf("0x%08x\n",result);
 	else assert(0);
 	return 0;
 }
