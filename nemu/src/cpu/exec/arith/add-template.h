@@ -9,7 +9,7 @@ static void do_execute() {
 
 	cpu.CF=(result < op_dest->val);
 	cpu.SF=result>>len;
-    cpu.OF=(s1==s2 && s1!=cpu.SF) ;
+    cpu.OF=(s1==s2 && s1!=cpu.SF);
 	cpu.ZF=!result;
 
 	OPERAND_W(op_dest, result);
