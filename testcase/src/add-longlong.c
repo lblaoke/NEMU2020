@@ -23,8 +23,7 @@ int main() {
 	}
 */
 	//nemu_assert(loop == NR_DATA * NR_DATA);
-	int i=3,j=3;
-	nemu_assert(add(test_data[i], test_data[j]) == ans[i*NR_DATA+j]);
+	nemu_assert(add(test_data[3], test_data[3]) == ans[27]);
 
 	return 0;
 }
