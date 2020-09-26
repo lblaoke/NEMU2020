@@ -3,21 +3,22 @@
 #define instr add
 
 static void do_execute() {
-	DATA_TYPE result=op_dest->val+op_src->val;
-	int len=(DATA_BYTE<<3)-1;
-	int s1=(op_dest->val)>>len,s2=(op_src->val)>>len;
-
-	cpu.CF=(result < op_dest->val);
-	cpu.SF=result>>len;
-    cpu.OF=(s1==s2 && s1!=cpu.SF);
-	cpu.ZF=!result;
-
-	OPERAND_W(op_dest, result);
-
-	result^=(result>>4);
-	result^=(result>>2);
-	result^=(result>>1);
-	cpu.PF=!(result & 1);
+	int d1 = op_src->val;
+	int d2 = op_dest->val;
+	int ans = d2+d1;
+	cpu.ZF = !ans;
+	cpu.SF = ans<0?1:0;
+ 	DATA_TYPE n =op_src->val+op_dest->val;
+	int cnt =0;
+	while(n) {
+		n = n&(n-1);
+		cnt++;
+	}	
+	cpu.PF = cnt%2==0? 1:0;
+	if((d1>0&&d2>0&&ans<=0)||(d2<0&&d1<0&&ans>=0)) cpu.OF = 1;
+	else cpu.OF = 0;
+	cpu.CF= (unsigned int) ans < (unsigned int)d2;	
+	OPERAND_W(op_dest,ans);
 
 	print_asm_no_template2();
 }
