@@ -14,8 +14,8 @@ int main() {
 
 	int i, j, ans_idx = 0;
 	int loop = 0;
-	for(i = 2; i <3 /*NR_DATA*/; i ++) {
-		for(j = 0; j < NR_DATA; j ++) {
+	for(i = 1; i <2 /*NR_DATA*/; i ++) {
+		for(j = 0; j <1 /*NR_DATA*/; j ++) {
 
 			nemu_assert(add(test_data[i], test_data[j]) == ans[ans_idx ++]);
 			loop ++;
