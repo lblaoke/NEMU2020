@@ -3,16 +3,21 @@
 #define instr sar
 
 static void do_execute () {
-	DATA_TYPE src = op_src->val;
-	DATA_TYPE_S dest = op_dest->val;
+	DATA_TYPE_S result=op_dest->val;
+	int len=(DATA_BYTE<<3)-1;
 
-	uint8_t count = src & 0x1f;
-	dest >>= count;
-	OPERAND_W(op_dest, dest);
+	result>>=(uint8_t)(0x1f & op_src->val);
 
-	/* There is no need to update EFLAGS, since no other instructions 
-	 * in PA will test the flags updated by this instruction.
-	 */
+	OPERAND_W(op_dest,result);
+
+	cpu.CF=cpu.OF=0;
+	cpu.SF=result>>len;
+    cpu.ZF=!result;
+
+	result^=(result>>4);
+	result^=(result>>2);
+	result^=(result>>1);
+	cpu.PF=!(result & 1);
 
 	print_asm_template2();
 }
