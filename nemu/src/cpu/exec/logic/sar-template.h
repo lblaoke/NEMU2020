@@ -5,12 +5,15 @@
 static void do_execute () {
 	DATA_TYPE_S result=op_dest->val;
 	int len=(DATA_BYTE<<3)-1;
+	uint8_t count=0x1f & op_src->val;
 
-	result>>=(uint8_t)(0x1f & op_src->val);
+	cpu.CF=!!(result & (1<<(count-1)));
+
+	result>>=count;
 
 	OPERAND_W(op_dest,result);
 
-	cpu.CF=cpu.OF=0;
+	cpu.OF=0;
 	cpu.SF=result>>len;
     cpu.ZF=!result;
 
