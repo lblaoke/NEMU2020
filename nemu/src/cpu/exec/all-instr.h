@@ -43,3 +43,4 @@
 #include "con-trans/jbe.h"
 #include "con-trans/jle.h"
 #include "con-trans/jno.h"
+#include "con-trans/jne.h"
