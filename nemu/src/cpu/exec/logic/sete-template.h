@@ -1,9 +1,9 @@
 #include "cpu/exec/template-start.h"
 
-#define instr setne
+#define instr sete
 
 static void do_execute() {
-	OPERAND_W(op_src,!cpu.ZF);
+	OPERAND_W(op_src,cpu.ZF);
 
 	print_asm_no_template1();
 }
