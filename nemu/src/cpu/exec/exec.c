@@ -194,7 +194,7 @@ helper_fun _2byte_opcode_table [256] = {
 /* 0x78 */	inv, inv, inv, inv, 
 /* 0x7c */	inv, inv, inv, inv, 
 /* 0x80 */	inv, jno_i_v, inv, inv,
-/* 0x84 */	inv, jne_i_v, jbe_i_v, inv,
+/* 0x84 */	je_i_v, jne_i_v, jbe_i_v, inv,
 /* 0x88 */	inv, inv, inv, inv, 
 /* 0x8c */	jl_i_v, inv, jle_i_v, jg_i_v, 
 /* 0x90 */	inv, inv, inv, inv,
