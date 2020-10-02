@@ -1,5 +1,6 @@
 #include "cpu/exec/helper.h"
 #include "cpu/decode/modrm.h"
+#include <nemu.h>
 
 make_helper(nop) {
 	print_asm("nop");
