@@ -3,7 +3,7 @@
 #define instr scas
 
 static void do_execute() {
-	DATA_TYPE a,dest;
+	uint32_t a,dest;
 
 	switch(DATA_BYTE) {
 		case 2:
@@ -12,9 +12,10 @@ static void do_execute() {
 			break;
 		default:
 			a=REG(R_EAX);
-			dest=swaddr_read(reg_l(R_EDI),DATA_BYTE);
+			dest=swaddr_read(reg_l(R_EDI),4);
+			if(DATA_BYTE==1) dest&=0xff;
 	}
-	DATA_TYPE result=a-dest;
+	uint32_t result=a-dest;
 
 	int len=(DATA_BYTE<<3)-1;
 	int s1=a>>len,s2=dest>>len;
