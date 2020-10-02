@@ -10,7 +10,7 @@ static void do_execute() {
 			else reg_w(R_SI)+=DATA_BYTE;
 			break;
 		default:
-			reg_l(R_EAX)=swaddr_read(reg_l(R_ESI),DATA_BYTE);
+			REG(R_EAX)=swaddr_read(reg_l(R_ESI),DATA_BYTE);
 			if(cpu.DF) reg_l(R_ESI)-=DATA_BYTE;
 			else reg_l(R_ESI)+=DATA_BYTE;
 	}

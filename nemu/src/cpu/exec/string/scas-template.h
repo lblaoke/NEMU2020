@@ -12,8 +12,7 @@ static void do_execute() {
 			break;
 		default:
 			a=REG(R_EAX);
-			dest=swaddr_read(reg_l(R_EDI),4);
-			if(DATA_BYTE==1) dest&=0xff;
+			dest=swaddr_read(reg_l(R_EDI),DATA_BYTE);
 	}
 	DATA_TYPE result=a-dest;
 
