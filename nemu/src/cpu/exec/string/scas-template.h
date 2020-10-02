@@ -7,7 +7,7 @@ static void do_execute() {
 
 	switch(DATA_BYTE) {
 		case 1:
-			a=reg_w(R_AL);
+			a=REG(R_AL);
 			dest=swaddr_read(reg_l(R_EDI),DATA_BYTE);
 			break;
 		case 2:
