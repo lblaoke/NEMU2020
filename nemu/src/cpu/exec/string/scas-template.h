@@ -9,10 +9,14 @@ static void do_execute() {
 		case 2:
 			a=reg_w(R_AX);
 			dest=swaddr_read(reg_w(R_DI),DATA_BYTE);
+			if(cpu.DF) reg_w(R_DI)-=DATA_BYTE;
+			else reg_w(R_DI)+=DATA_BYTE;
 			break;
 		default:
 			a=REG(R_EAX);
 			dest=swaddr_read(reg_l(R_EDI),DATA_BYTE);
+			if(cpu.DF) reg_l(R_EDI)-=DATA_BYTE;
+			else reg_l(R_EDI)+=DATA_BYTE;
 	}
 	DATA_TYPE result=a-dest;
 
