@@ -5,7 +5,7 @@
 static void do_execute() {
 	switch(DATA_BYTE) {
 		case 2:
-			reg_w(R_AL)=swaddr_read(reg_w(R_SI),DATA_BYTE);
+			reg_w(R_AX)=swaddr_read(reg_w(R_SI),DATA_BYTE);
 			if(cpu.DF) reg_w(R_SI)-=DATA_BYTE;
 			else reg_w(R_SI)+=DATA_BYTE;
 			break;
