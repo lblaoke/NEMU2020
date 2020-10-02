@@ -11,8 +11,8 @@ static void do_execute() {
 			break;
 		default:
 			REG(R_EAX)=swaddr_read(reg_l(R_ESI),DATA_BYTE);
-			if(cpu.DF) reg_l(R_ESI)-=DATA_BYTE;
-			else reg_l(R_ESI)+=DATA_BYTE;
+			if(cpu.DF) REG(R_ESI)-=DATA_BYTE;
+			else REG(R_ESI)+=DATA_BYTE;
 	}
 
 	print_asm("lods");
