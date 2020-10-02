@@ -7,12 +7,12 @@ static void do_execute() {
 	int len=(DATA_BYTE<<3)-1;
 	int s1=op_dest->val>>len,s2=op_src->val>>len;
 
-	cpu.CF=(result < op_dest->val);
 	cpu.SF=result>>len;
-    cpu.OF=(s1==s2 && s1!=cpu.SF) ;
 	cpu.ZF=!result;
+	cpu.CF=(result < op_dest->val);
+    cpu.OF=(s1==s2 && s1!=cpu.SF);
 
-	OPERAND_W(op_dest, result);
+	OPERAND_W(op_dest,result);
 
 	result^=(result>>4);
 	result^=(result>>2);
