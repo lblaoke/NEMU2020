@@ -34,6 +34,11 @@ int main() {
 
 	for(i=0;i<8;i++) nemu_assert(i==f(i));
 
+	int a=10;
+	int *p=&a;
+	(*p)++;
+	nemu_assert(a==11);
+
 	memset(buf,0xf,sizeof(buf));
 	buf[127]=0;
 	nemu_assert(strlen(buf)==127);
