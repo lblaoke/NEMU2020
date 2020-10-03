@@ -50,9 +50,11 @@ int main() {
 	strcpy(buf,str);
 	nemu_assert(!strcmp(str,"mytest"));
 
-	FLOAT f1=int2F(4);
+	sprintf(buf, "0x%08x",F_div_F(int2F(4),int2F(2)));
+	nemu_assert(!strcmp(buf, "0x00020000"));
 
-	nemu_assert(F_div_F(f1,int2F(2))==int2F(2));
+	//FLOAT f1=int2F(4);
+	//nemu_assert(F_div_F(f1,int2F(2))==int2F(2));
 
 	return 0;
 }
