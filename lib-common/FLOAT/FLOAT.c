@@ -38,8 +38,8 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 	a=a%b;
 
 	for(i=0;i<16;i++) {
-		result<<=1;
 		a<<=1;
+		result<<=1;
 		if(a>=b) {
 			a-=b;
 			result++;
