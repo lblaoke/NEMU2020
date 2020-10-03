@@ -46,6 +46,8 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 		}
 	}
 
+	printf("0x%08x",result);
+
 	return sign?(-result):result;
 }
 
