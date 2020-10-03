@@ -4,6 +4,7 @@
 #include "FLOAT.h"
 
 char buf[128];
+/*
 char str[128]="mytest";
 
 int a[8]={0,1,0,1,0,1,0,1};
@@ -14,8 +15,9 @@ int f(int x) {
 	if(x<=0) return x;
 	return 1+f(x-1);
 }
-
+*/
 int main() {
+/*
 	int i;
 
 	for(i=0;i<8;i++) {
@@ -49,7 +51,7 @@ int main() {
 
 	strcpy(buf,str);
 	nemu_assert(!strcmp(str,"mytest"));
-
+*/
 	sprintf(buf, "%x",F_div_F(int2F(4),int2F(2)));
 	//sprintf(buf, "%x",f2F(2.0));
 	nemu_assert(!strcmp(buf, "20000"));
