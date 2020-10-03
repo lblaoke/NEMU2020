@@ -52,7 +52,7 @@ int main() {
 
 	FLOAT f1=int2F(2);
 
-	nemu_assert(F_mul_F(f1,f1)==int2F(4));
+	nemu_assert(F_div_F(f1,f1)==int2F(1));
 
 	return 0;
 }
