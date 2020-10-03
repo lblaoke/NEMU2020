@@ -23,19 +23,19 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 	 * It is OK not to use the template above, but you should figure
 	 * out another way to perform the division.
 	 */
-	int i,sign=1;
+	int i,sign=0;
 
 	if(a<0) {
-		sign=-sign;
+		sign=!sign;
 		a=-a;
 	}
 	if(b<0) {
-		sign=-sign;
+		sign=!sign;
 		b=-b;
 	}
 
 	int result=a/b;
-	a=a%b;
+	a%=b;
 
 	for(i=0;i<16;i++) {
 		result<<=1;
