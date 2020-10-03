@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "trap.h"
+#include "FLOAT.h"
 
 char buf[128];
 char str[128]="mytest";
@@ -48,6 +49,10 @@ int main() {
 
 	strcpy(buf,str);
 	nemu_assert(!strcmp(str,"mytest"));
+
+	FLOAT f1=int2F(2);
+
+	nemu_assert(F_mul_F(f1,f1)==int2F(4));
 
 	return 0;
 }
