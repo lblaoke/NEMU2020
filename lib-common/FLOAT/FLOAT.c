@@ -25,11 +25,11 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 	 */
 	int i,sign=0;
 
-	if(a<0) {
+	if(a>>31) {
 		sign=!sign;
 		a=-a;
 	}
-	if(b<0) {
+	if(b>>31) {
 		sign=!sign;
 		b=-b;
 	}
