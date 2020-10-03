@@ -33,6 +33,7 @@ int main() {
 	}
 
 	nemu_assert(2*(5-4)/1==2);
+	nemu_assert(100/3==33);
 
 	for(i=0;i<8;i++) nemu_assert(i==f(i));
 
