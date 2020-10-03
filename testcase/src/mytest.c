@@ -50,8 +50,8 @@ int main() {
 	strcpy(buf,str);
 	nemu_assert(!strcmp(str,"mytest"));
 
-	//sprintf(buf, "%x",F_div_F(int2F(4),int2F(2)));
-	sprintf(buf, "%x",int2F(2));
+	sprintf(buf, "%x",F_div_int(int2F(4),2));
+	//sprintf(buf, "%x",int2F(2));
 	nemu_assert(!strcmp(buf, "20000"));
 
 	//FLOAT f1=int2F(4);
