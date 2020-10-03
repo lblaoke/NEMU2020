@@ -3,7 +3,7 @@
 FLOAT_O := $(FLOAT:.a=.o)
 FLOAT_VFPRINTF_O := $(dir $(FLOAT))FLOAT_vfprintf.o
 
-#FLOAT_A_OBJ := $(FLOAT_O) $(FLOAT_VFPRINTF_O)
+FLOAT_A_OBJ := $(FLOAT_O) #$(FLOAT_VFPRINTF_O)
 		
 $(FLOAT): $(FLOAT_A_OBJ)
 	ar r $@ $^
