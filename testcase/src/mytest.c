@@ -19,8 +19,9 @@ int main() {
 		nemu_assert((a[i] && (b[i] || c[i]))==((a[i] && b[i]) || (a[i] && c[i])));
 	}
 
-	memset(buf,0,sizeof(buf));
-	nemu_assert(strlen(buf)==0);
+	memset(buf,0xf,sizeof(buf));
+	buf[127]=0;
+	nemu_assert(strlen(buf)==128);
 
 	strcpy(buf,str);
 	nemu_assert(!strcmp(str,"mytest"));
