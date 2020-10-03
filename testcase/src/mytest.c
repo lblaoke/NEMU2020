@@ -50,9 +50,9 @@ int main() {
 	strcpy(buf,str);
 	nemu_assert(!strcmp(str,"mytest"));
 
-	FLOAT f1=f2F(1.75);
+	FLOAT f1=int2F(-2);
 
-	nemu_assert(F_mul_int(f1,4)==int2F(7));
+	nemu_assert(Fabs(f1)==int2F(2));
 
 	return 0;
 }
