@@ -52,7 +52,7 @@ int main() {
 
 	FLOAT f1=int2F(4);
 
-	nemu_assert(sqrt(f1)==int2F(2));
+	nemu_assert(pow(f1,int2F(2))==int2F(16));
 
 	return 0;
 }
