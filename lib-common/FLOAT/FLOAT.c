@@ -35,7 +35,7 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 	}
 
 	int result=a/b;
-	a%=b;
+	a=a%b;
 
 	for(i=0;i<16;i++) {
 		result<<=1;
