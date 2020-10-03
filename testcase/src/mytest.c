@@ -19,6 +19,14 @@ int main() {
 		nemu_assert((a[i] && (b[i] || c[i]))==((a[i] && b[i]) || (a[i] && c[i])));
 	}
 
+	for(i=0;i<8;i++) {
+		nemu_assert(a[i]*(b[i]+c[i])==a[i]*b[i]+a[i]*c[i]);
+		nemu_assert(a[i]-b[i]==-(b[i]-a[i]));
+		nemu_assert(a[i]+a[i]==a[i]*2);
+		nemu_assert(a[i]/2==(a[i]>>1));
+		nemu_assert(a[i]-a[i]==0);
+	}
+
 	memset(buf,0xf,sizeof(buf));
 	buf[127]=0;
 	nemu_assert(strlen(buf)==127);
