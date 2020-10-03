@@ -51,11 +51,11 @@ void cpu_exec(volatile uint32_t n) {
 
 	for(; n > 0; n --) {
 #ifdef DEBUG
-		//swaddr_t eip_temp = cpu.eip;
-		if((n & 0xffff) == 0) {
-			/* Output some dots while executing the program. */
-			fputc('.', stderr);
-		}
+		swaddr_t eip_temp = cpu.eip;
+		//if((n & 0xffff) == 0) {
+		//	/* Output some dots while executing the program. */
+		//	fputc('.', stderr);
+		//}
 #endif
 
 		/* Execute one instruction, including instruction fetch,
@@ -65,7 +65,7 @@ void cpu_exec(volatile uint32_t n) {
 		cpu.eip += instr_len;
 
 #ifdef DEBUG
-		//print_bin_instr(eip_temp, instr_len);
+		print_bin_instr(eip_temp, instr_len);
 		strcat(asm_buf, assembly);
 		//Log_write("%s\n", asm_buf);
 		if(n_temp < MAX_INSTR_TO_PRINT) {
