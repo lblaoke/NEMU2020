@@ -32,6 +32,8 @@ int main() {
 		nemu_assert(a[i]-a[i]==0);
 	}
 
+	nemu_assert(2*(5-4)/1==2);
+
 	for(i=0;i<8;i++) nemu_assert(i==f(i));
 
 	int d=10;
