@@ -15,12 +15,12 @@ int main() {
 	for(i=0;i<8;i++) {
 		nemu_assert(!(a[i] && b[i])==(!a[i] || !b[i]));
 		nemu_assert(!(a[i] || b[i])==(!a[i] && !b[i]));
-		nemu_assert(!!a[i]==a[i])
-		nemu_assert(a[i] && (b[i] || c[i])==(a[i] && b[i]) || (a[i] && c[i]));
+		nemu_assert(!!a[i]==a[i]);
+		nemu_assert((a[i] && (b[i] || c[i]))==((a[i] && b[i]) || (a[i] && c[i])));
 	}
 
 	memset(buf,0,sizeof(buf));
-	nemu_assert(strlen(buf)==128)
+	nemu_assert(strlen(buf)==128);
 	strcpy(buf,str);
 	nemu_assert(!strcmp(str,"mytest"));
 
