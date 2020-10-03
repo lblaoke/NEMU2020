@@ -52,6 +52,8 @@ int main() {
 
 	FLOAT f1=int2F(4);
 
+	printf("0x%08x\n",F_div_F(f1,int2F(2)));
+
 	nemu_assert(F_div_F(f1,int2F(2))==int2F(2));
 
 	return 0;
