@@ -34,10 +34,10 @@ int main() {
 
 	for(i=0;i<8;i++) nemu_assert(i==f(i));
 
-	int a=10;
-	int *p=&a;
+	int d=10;
+	int *p=&d;
 	(*p)++;
-	nemu_assert(a==11);
+	nemu_assert(d==11);
 
 	memset(buf,0xf,sizeof(buf));
 	buf[127]=0;
