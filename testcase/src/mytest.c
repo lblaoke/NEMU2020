@@ -1,8 +1,8 @@
-#include <stdio.h>
-#include <string.h>
-#include "trap.h"
+//#include <stdio.h>
+//#include <string.h>
+//#include "trap.h"
 #include "FLOAT.h"
-
+/*
 char buf[128];
 
 char str[128]="mytest";
@@ -15,9 +15,9 @@ int f(int x) {
 	if(x<=0) return x;
 	return 1+f(x-1);
 }
-
+*/
 int main() {
-
+/*
 	int i;
 
 	for(i=0;i<8;i++) {
@@ -60,8 +60,9 @@ int main() {
 	FLOAT f1=int2F(4);
 	nemu_assert(F_div_F(f1,int2F(2))==int2F(2));
 	nemu_assert(F_div_F(f2F(-3.3),f2F(3.0))==f2F(-1.1));
-
-	//nemu_assert(sqrt(0x40000)==0x20000);
+	nemu_assert(F_div_int(0x30000,-2)==f2F(-1.5));
+*/
+	//nemu_assert(sqrt(0x00000)==0x00004);
 	sqrt(0x10000);
 
 	return 0;
