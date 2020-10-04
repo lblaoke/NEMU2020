@@ -117,7 +117,13 @@ static void modify_ppfs_setargs() {
 	 * Below is the code section in _vfprintf_internal() relative to
 	 * the modification.
 	 */
-
+	int addr=(int)(&_ppfs_setargs);
+	char *tmp=(char *)(addr+0x71);	
+	*tmp=0xeb;		
+	tmp=(char *)(addr+0x72);
+	*tmp=0x30;
+	tmp=(char *)(addr+0x73);
+	*tmp=0x90;	
 #if 0
 	enum {                          /* C type: */
 		PA_INT,                       /* int */
