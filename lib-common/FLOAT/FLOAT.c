@@ -51,7 +51,7 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 	long long A=(long long)a;
 	A<<=16;
 	//asm volatile ("idiv %2" : "=a"(???), "=d"(???) : "r"(???), "a"(???), "d"(???));
-	return 0;
+	return (FLOAT)A;
 
 }
 
