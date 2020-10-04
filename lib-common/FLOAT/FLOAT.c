@@ -30,31 +30,6 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 	 * It is OK not to use the template above, but you should figure
 	 * out another way to perform the division.
 	 */
-/*
-	int i,sign=0;
-
-	if(a>>31) {
-		sign=!sign;
-		a=-a;
-	}
-	if(b>>31) {
-		sign=!sign;
-		b=-b;
-	}
-
-	int result=a/b;
-	a%=b;
-
-	for(i=0;i<16;i++) {
-		a<<=1;
-		result<<=1;
-		if(a>=b) {
-			a-=b;
-			result++;
-		}
-	}
-	return sign?(-result):result;
-*/
 	int sign=1;
 	if(a>>31) {
 		sign=-sign;
