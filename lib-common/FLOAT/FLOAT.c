@@ -55,13 +55,13 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 	}
 	return sign?(-result):result;
 */
-	int sign=0;
+	int sign=1;
 	if(a>>31) {
-		sign=!sign;
+		sign=-sign;
 		a=-a;
 	}
 	if(b>>31) {
-		sign=!sign;
+		sign=-sign;
 		b=-b;
 	}
 
@@ -71,7 +71,7 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 
 	asm volatile ("div %2" : "=a"(L.l), "=d"(L.h) : "r"(b), "a"(L.l), "d"(L.h));
 
-	return sign?(-L.l):L.l;
+	return F_mul_int(L.l,sign);
 
 }
 
