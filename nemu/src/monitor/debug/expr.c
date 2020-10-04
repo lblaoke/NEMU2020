@@ -142,8 +142,8 @@ uint32_t eval(int l,int r) {
 			}
 		}
 		else if(tokens[l].type==NUMBER) sscanf(tokens[l].str,"%d",&result);
-		else if(tokens[l].type==MARK) result=elf_value(tokens[l].str);
-		else assert(0),printf("00xx\n");
+		else if(tokens[l].type==MARK) printf("00xx\n"),result=elf_value(tokens[l].str);
+		else assert(0);
 		return result;
 	}
 
