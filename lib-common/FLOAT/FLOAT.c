@@ -81,11 +81,13 @@ FLOAT Fabs(FLOAT a) {
 
 FLOAT sqrt(FLOAT x) {
 	FLOAT dt, t = int2F(2);
+	int i=0;
 
 	do {
+		i++;
 		dt = F_div_int((F_div_F(x, t) - t), 2);
 		t += dt;
-		break;
+		if(i>1) break;
 	} while(Fabs(dt) > f2F(1e-4));
 
 	return t;
