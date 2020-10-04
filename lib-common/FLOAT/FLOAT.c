@@ -5,6 +5,13 @@ FLOAT F_mul_F(FLOAT a, FLOAT b) {
 	return (FLOAT)(result>>16);
 }
 
+typedef struct {
+	union {
+		long long x;
+		struct {int l,h};
+	}
+} L_t;
+
 FLOAT F_div_F(FLOAT a, FLOAT b) {
 	/* Dividing two 64-bit integers needs the support of another library
 	 * `libgcc', other than newlib. It is a dirty work to port `libgcc'
@@ -49,9 +56,12 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 	return sign?(-result):result;
 */
 	long long A=(long long)a;
-	A<<=16;
-	asm volatile ("idiv %2" : "=a"(a), "=d"(a) : "r"(a), "a"(b), "d"(b));
-	return (FLOAT)A;
+	L_t L;
+	L.x=(A<<16);
+
+	asm volatile ("idiv %2" : "=a"(L.l), "=d"(L.h) : "r"(b), "a"(L.l), "d"(L.h));
+
+	return L.l;
 
 }
 
