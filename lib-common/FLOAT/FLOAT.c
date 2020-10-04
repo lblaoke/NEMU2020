@@ -8,8 +8,8 @@ FLOAT F_mul_F(FLOAT a, FLOAT b) {
 typedef struct {
 	union {
 		long long x;
-		struct {int l,h};
-	}
+		struct {int l,h;};
+	};
 } L_t;
 
 FLOAT F_div_F(FLOAT a, FLOAT b) {
