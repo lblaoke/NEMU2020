@@ -1,6 +1,5 @@
 #include "trap.h"
 int add1(int c,int b) {
-	set_bp();
 	return c+b;
 }
 int add(int a, int b) {
