@@ -63,7 +63,7 @@ int main() {
 	nemu_assert(F_div_int(0x30000,-2)==f2F(-1.5));
 */
 	nemu_assert(sqrt(0x00000)==0x00004);
-	nemu_assert(sqrt(0x40000)==0x20000)
+	nemu_assert(sqrt(0x40000)==0x20000);
 	sqrt(0x10000);
 
 	return 0;
