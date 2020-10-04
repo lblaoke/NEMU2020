@@ -78,7 +78,7 @@ static bool make_token(char *e) {
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
 
-				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
+				//Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
 				
 				position += substr_len;
 				
@@ -143,7 +143,7 @@ uint32_t eval(int l,int r) {
 		}
 		else if(tokens[l].type==NUMBER) sscanf(tokens[l].str,"%d",&result);
 		else if(tokens[l].type==MARK) result=elf_value(tokens[l].str);
-		else assert(0);
+		else assert(0),printf("00xx\n");
 		return result;
 	}
 
