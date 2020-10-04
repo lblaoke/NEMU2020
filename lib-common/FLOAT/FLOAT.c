@@ -45,7 +45,6 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 			result++;
 		}
 	}
-	set_dp();
 
 	return 0x20000+0*(sign?(-result):result);
 }
