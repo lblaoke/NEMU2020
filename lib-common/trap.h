@@ -14,6 +14,7 @@
 
 #define nemu_assert(cond) \
 	do { \
+		printf("0x%x\n",cond);
 		if( !(cond) ) HIT_BAD_TRAP; \
 	} while(0)
 
