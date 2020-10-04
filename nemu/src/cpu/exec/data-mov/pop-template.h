@@ -13,7 +13,7 @@ static void do_execute () {
 		REG(R_ESP)+=DATA_BYTE;
 	}
 
-	print_asm_no_template1();
+	//print_asm_no_template1();
 }
 
 #if DATA_BYTE==2 || DATA_BYTE==4

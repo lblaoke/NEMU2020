@@ -7,7 +7,7 @@ static void do_execute() {
 
 	print_asm("jl %x",cpu.eip+1+DATA_BYTE+displacement);
 
-	if(cpu.SF!=cpu.OF) cpu.eip+=displacement;
+	if(cpu.OF!=cpu.SF) cpu.eip+=displacement;
 }
 
 make_instr_helper(i)
