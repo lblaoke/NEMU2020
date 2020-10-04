@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include "FLOAT.h"
+#include <sys/mman.h>
 
 extern char _vfprintf_internal;
 extern char _fpmaxtostr;
@@ -14,11 +15,32 @@ __attribute__((used)) static int format_FLOAT(FILE *stream, FLOAT f) {
 	 *         0x00010000    "1.000000"
 	 *         0x00013333    "1.199996"
 	 */
-
 	char buf[80];
-	int len = sprintf(buf, "0x%08x", f);
+	int i,sign=0;
+	if(f>>31) {
+		sign=1;
+		f=-f;
+	}
+
+	int len,d=F2int(f),r=f & 0xffff,R=0;
+
+	for(i=100000;i>=1;i/=10) {
+		r*=10;
+		int b=0;
+		if(r>=0x10000) {
+			b=(r>>16);
+			r-=(b<<16);
+		}
+		R+=i*b;
+	}
+
+	if(sign) len=sprintf(buf,"-%d.%06d",d,R);
+	else len=sprintf(buf,"%d.%06d",d,R);
+
 	return __stdio_fwrite(buf, len, stream);
 }
+
+#define o 0x306
 
 static void modify_vfprintf() {
 	/* TODO: Implement this function to hijack the formating of "%f"
@@ -26,7 +48,30 @@ static void modify_vfprintf() {
 	 * is the code section in _vfprintf_internal() relative to the
 	 * hijack.
 	 */
+	int addr=(int)(&_vfprintf_internal);
 
+	//mprotect((void *)((addr+o-100) & 0xfffff000),4096*2,PROT_READ | PROT_WRITE | PROT_EXEC);
+
+	char *tmp=(char *)(addr+o-11);	
+	*tmp=0x8;		
+	tmp=(char *)(addr+o-10);
+	*tmp=0xff;	
+	tmp=(char *)(addr+o-9);
+	*tmp=0x32;	
+	tmp=(char *)(addr+o-8);
+	*tmp=0x90;
+
+	tmp=(char *)(addr+o-30);
+	*tmp=0x90;
+	tmp=(char *)(addr+o-29);
+	*tmp=0x90;
+	tmp=(char *)(addr+o-33);
+	*tmp=0x90;
+	tmp=(char *)(addr+o-34);
+	*tmp=0x90;
+
+	int *p=(int *)(addr+o+1);
+	*p+=((int)format_FLOAT-(int)(&_fpmaxtostr));
 #if 0
 	else if (ppfs->conv_num <= CONV_A) {  /* floating point */
 		ssize_t nf;
