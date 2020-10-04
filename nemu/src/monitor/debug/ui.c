@@ -9,6 +9,12 @@
 
 void cpu_exec(uint32_t);
 
+typedef struct {
+    swaddr_t prev_ebp;
+    swaddr_t ret_addr;
+    uint32_t args[4];
+} PartOfStackFrame;
+
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 char* rl_gets() {
 	static char *line_read = NULL;
@@ -100,7 +106,33 @@ static int cmd_d(char *args) {
 	delete_wp(no);
 	return 0;
 }
-static int cmd_bt(char *args) {return 0;}
+
+void elf_func(swaddr_t,char *);
+
+void read_ebp (swaddr_t addr , PartOfStackFrame *ebp) {
+	ebp -> prev_ebp = swaddr_read (addr , 4);
+	ebp -> ret_addr = swaddr_read (addr + 4 , 4);
+	int i;
+	for (i = 0;i < 4;i ++) ebp -> args [i] = swaddr_read (addr + 8 + 4 * i , 4);
+}
+static int cmd_bt(char *args) {
+	int j = 0;
+	PartOfStackFrame now_ebp;
+	char tmp [32];
+	swaddr_t addr = reg_l (R_EBP);
+	now_ebp.ret_addr = cpu.eip;
+	while (addr > 0) {
+		printf ("#%d  0x%08x in ",j++,now_ebp.ret_addr);
+		elf_func(now_ebp.ret_addr,tmp);
+		printf("%s\t",tmp);
+		read_ebp (addr,&now_ebp);
+		if (strcmp (tmp,"main") == 0)printf ("( )\n");
+		else printf ("( %d , %d , %d , %d )\n", now_ebp.args[0],now_ebp.args[1],now_ebp.args[2],now_ebp.args[3]);
+		addr = now_ebp.prev_ebp;
+	}
+	return 0;
+}
+
 static int cmd_cache(char *args) {return 0;}
 
 static struct {

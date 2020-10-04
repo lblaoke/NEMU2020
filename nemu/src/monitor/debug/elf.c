@@ -90,3 +90,13 @@ uint32_t elf_value(char *s) {
 	}
 	return 0;
 }
+
+void elf_func(swaddr_t addr,char *s) {
+	int i;
+	for (i=0;i<nr_symtab_entry;i++) {
+		if (symtab[i].st_value<=addr && symtab[i].st_value+symtab[i].st_size>=addr && (symtab[i].st_info & 0xf)==STT_FUNC) {
+			strcpy (s,strtab+symtab[i].st_name);
+			break;
+		}
+	}
+}
