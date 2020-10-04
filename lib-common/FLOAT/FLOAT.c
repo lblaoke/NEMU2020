@@ -55,13 +55,23 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 	}
 	return sign?(-result):result;
 */
+	int sign=0;
+	if(a>>31) {
+		sign=!sign;
+		a=-a;
+	}
+	if(b>>31) {
+		sign=!sign;
+		b=-b;
+	}
+
 	long long A=(long long)a;
 	L_t L;
 	L.x=(A<<16);
 
-	asm volatile ("idiv %2" : "=a"(L.l), "=d"(L.h) : "r"(b), "a"(L.l), "d"(L.h));
+	asm volatile ("div %2" : "=a"(L.l), "=d"(L.h) : "r"(b), "a"(L.l), "d"(L.h));
 
-	return L.l;
+	return sign?(-L.l):L.l;
 
 }
 
