@@ -6,6 +6,9 @@
 #include <sys/types.h>
 #include <regex.h>
 
+#define max_string_long 32
+#define max_token_num 32
+
 enum {NOTYPE = 256, EQ , NEQ , AND , OR , MINUS , POINTOR , NUMBER , HNUMBER , REGISTER , MARK};
 
 static struct rule {
@@ -108,6 +111,9 @@ static bool make_token(char *e) {
 
 	return true; 
 }
+
+uint32_t elf_value(char *);
+
 uint32_t eval(int l,int r) {
 	uint32_t result=0,l_operand,r_operand;
 	int i,min_index=r,min_priority=10,bracket_count=0;
@@ -136,6 +142,7 @@ uint32_t eval(int l,int r) {
 			}
 		}
 		else if(tokens[l].type==NUMBER) sscanf(tokens[l].str,"%d",&result);
+		else if(tokens[l].type==MARK) result=elf_value(tokens[l].str);
 		else assert(0);
 		return result;
 	}

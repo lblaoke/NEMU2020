@@ -4,9 +4,9 @@
 
 char *exec_file = NULL;
 
-static char *strtab = NULL;
-static Elf32_Sym *symtab = NULL;
-static int nr_symtab_entry;
+char *strtab = NULL;
+Elf32_Sym *symtab = NULL;
+int nr_symtab_entry;
 
 void load_elf_tables(int argc, char *argv[]) {
 	int ret;
@@ -81,3 +81,14 @@ void load_elf_tables(int argc, char *argv[]) {
 	fclose(fp);
 }
 
+uint32_t elf_value(char *s) {
+	int i;
+	for(i=0;i<nr_symtab_entry;i++) if((symtab[i].st_info & 0xf)==STT_OBJECT) {
+		char tmp[32];
+		int tmplen=symtab[i+1].st_name-symtab[i].st_name-1;
+		strncpy(tmp,strtab+symtab[i].st_name,tmplen);
+		tmp[tmplen]='\0';
+		if(!strcmp(tmp,s)) return symtab[i].st_value;
+	}
+	return 0;
+}
