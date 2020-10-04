@@ -33,6 +33,7 @@
 #include "logic/test.h"
 #include "logic/setne.h"
 #include "logic/sete.h"
+#include "logic/shld.h"
 
 #include "string/rep.h"
 #include "string/stos.h"
