@@ -23,6 +23,7 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 	 * It is OK not to use the template above, but you should figure
 	 * out another way to perform the division.
 	 */
+/*
 	int i,sign=0;
 
 	if(a>>31) {
@@ -45,8 +46,9 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 			result++;
 		}
 	}
+*/
 
-	return (sign?(-result):result);
+	return ((a/b)<<16);
 }
 
 FLOAT f2F(float a) {
