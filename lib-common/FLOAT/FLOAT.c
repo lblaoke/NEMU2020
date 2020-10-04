@@ -30,23 +30,14 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 	 * It is OK not to use the template above, but you should figure
 	 * out another way to perform the division.
 	 */
-	int sign=1;
-	if(a>>31) {
-		sign=-sign;
-		a=-a;
-	}
-	if(b>>31) {
-		sign=-sign;
-		b=-b;
-	}
 
 	long long A=(long long)a;
 	L_t L;
 	L.x=(A<<16);
 
-	asm volatile ("div %2" : "=a"(L.l), "=d"(L.h) : "r"(b), "a"(L.l), "d"(L.h));
+	asm volatile ("idiv %2" : "=a"(L.l), "=d"(L.h) : "r"(b), "a"(L.l), "d"(L.h));
 
-	return F_mul_int(L.l,sign);
+	return L.l;
 
 }
 
@@ -80,25 +71,25 @@ FLOAT Fabs(FLOAT a) {
 /* Functions below are already implemented */
 
 FLOAT sqrt(FLOAT x) {
-	FLOAT dt, t = int2F(2);
+	FLOAT dt, t = int2F(2),threshold=f2F(1e-4);
 
 	do {
 		dt = F_div_int((F_div_F(x, t) - t), 2);
 		t += dt;
-	} while(Fabs(dt) > f2F(1e-4));
+	} while(Fabs(dt) > threshold);
 
 	return t;
 }
 
 FLOAT pow(FLOAT x, FLOAT y) {
 	/* we only compute x^0.333 */
-	FLOAT t2, dt, t = int2F(2);
+	FLOAT t2, dt, t = int2F(2),threshold=f2F(1e-4);
 
 	do {
 		t2 = F_mul_F(t, t);
 		dt = (F_div_F(x, t2) - t) / 3;
 		t += dt;
-	} while(Fabs(dt) > f2F(1e-4));
+	} while(Fabs(dt) > threshold);
 
 	return t;
 }
