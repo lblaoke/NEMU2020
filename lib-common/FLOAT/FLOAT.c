@@ -46,7 +46,7 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 		}
 	}
 
-	return 0x20000+0*(sign?(-result):result);
+	return (sign?(-result):result);
 }
 
 FLOAT f2F(float a) {
