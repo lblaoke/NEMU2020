@@ -1,16 +1,23 @@
 #include "cpu/exec/template-start.h"
 
-#define instr cltd
+#if DATA_BYTE == 2 || DATA_BYTE == 4
+make_helper(concat(cltd_, SUFFIX)) {
+	REG(R_EDX) = -(MSB(REG(R_EAX)));
 
-static void do_execute () {
-	DATA_TYPE len=(DATA_BYTE<<1)-1;
-
-	REG(R_EDX)=0;
-	if(REG(R_EAX)>>len) REG(R_EDX)--;
-
-	print_asm("cltd");
+	print_asm("cltd" str(SUFFIX));
+	return 1;
 }
 
-make_instr_helper(n)
+make_helper(concat(cwtl_, SUFFIX)) {
+#if DATA_BYTE == 2
+	reg_w(R_AX) = (int8_t)reg_b(R_AL);
+#else
+	reg_l(R_EAX) = (int16_t)reg_w(R_AX);
+#endif
+
+	print_asm("cwtl" str(SUFFIX));
+	return 1;
+}
+#endif
 
 #include "cpu/exec/template-end.h"
