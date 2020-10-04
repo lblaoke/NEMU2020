@@ -84,6 +84,7 @@ void load_elf_tables(int argc, char *argv[]) {
 uint32_t elf_value(char *s) {
 	int i;
 	for(i=0;i<nr_symtab_entry;i++) if((symtab[i].st_info & 0xf)==STT_OBJECT) {
+		printf("%d\n",i);
 		char tmp[32];
 		int tmplen=symtab[i+1].st_name-symtab[i].st_name-1;
 		strncpy(tmp,strtab+symtab[i].st_name,tmplen);
