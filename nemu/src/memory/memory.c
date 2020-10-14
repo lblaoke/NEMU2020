@@ -1,5 +1,6 @@
 #include "common.h"
 #include "burst.h"
+#include <stdlib.h>
 
 #define DATA_WIDTH1 6
 #define GROUP_WIDTH1 7
@@ -31,6 +32,7 @@ void init_cache() {
 }
 
 int cache1_read(hwaddr_t addr) {
+	srand(0);
 	uint32_t addr_tag=(addr>>(GROUP_WIDTH1+DATA_WIDTH1));
 	uint32_t group=(addr>>DATA_WIDTH1) & (NR_GROUP1-1);
 
@@ -43,7 +45,8 @@ int cache1_read(hwaddr_t addr) {
 
 	if(!success) {
 		for(in=0;in<NR_IN1 && cache1[group][in].valid;in++);
-		Assert(in<NR_IN1,"no free cache!");
+		
+		if(in>=NR_IN1) in=rand()%NR_IN1;
 
 		addr&=0xffffffc0;
 		for(i=0;i<BURST_LEN;i++) ddr3_read(addr+i*BURST_LEN,cache1[group][in].data+i*BURST_LEN);
