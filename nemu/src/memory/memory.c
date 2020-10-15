@@ -79,7 +79,7 @@ uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
 	uint8_t temp[4];
 
 	if(offset + len >= NR_DATA) {
-		uint32_t _block = cache1_read(addr + NR_DATA-offset);
+		uint32_t _block = cache1_read(addr + len);
 		memcpy(temp,cache1[group][block].data + offset, NR_DATA - offset);
 		memcpy(temp + NR_DATA - offset,cache1[group][_block].data, len - (NR_DATA - offset));
 	} else memcpy(temp,cache1[group][block].data + offset,len);
