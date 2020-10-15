@@ -48,7 +48,7 @@ uint32_t cache1_read(hwaddr_t addr) {
 		
 		if(in>=NR_IN1) in=rand()%NR_IN1;
 
-		uint32_t start=addr & 0xffffffc0;
+		uint32_t start=addr & (~(NR_DATA-1));
 		for(i=0;i<BURST_LEN;i++) ddr3_read(start+i*BURST_LEN,cache1[group][in].data+i*BURST_LEN);
 		cache1[group][in].tag=addr_tag;
 		cache1[group][in].valid=true;
