@@ -2,11 +2,11 @@
 #include "burst.h"
 #include <stdlib.h>
 
-#define DATA_WIDTH1 6
+#define DATA_WIDTH 6
 #define GROUP_WIDTH1 7
 #define IN_WIDTH1 3
 
-#define NR_DATA (1 << DATA_WIDTH1)
+#define NR_DATA (1 << DATA_WIDTH)
 #define NR_GROUP1 (1 << GROUP_WIDTH1)
 #define NR_IN1 (1 << IN_WIDTH1)
 
@@ -33,8 +33,8 @@ void init_cache() {
 
 uint32_t cache1_read(hwaddr_t addr) {
 	srand(0);
-	uint32_t addr_tag=(addr>>(GROUP_WIDTH1+DATA_WIDTH1));
-	uint32_t group=(addr>>DATA_WIDTH1) & (NR_GROUP1-1);
+	uint32_t addr_tag=(addr>>(GROUP_WIDTH1+DATA_WIDTH));
+	uint32_t group=(addr>>DATA_WIDTH) & (NR_GROUP1-1);
 
 	bool success=false;
 	uint32_t in,i;
@@ -57,8 +57,8 @@ uint32_t cache1_read(hwaddr_t addr) {
 	return in;
 }
 void cache1_write(hwaddr_t addr,size_t len,uint32_t buf) {
-	uint32_t addr_tag=(addr>>(GROUP_WIDTH1+DATA_WIDTH1));
-	uint32_t group=(addr>>DATA_WIDTH1) & (NR_GROUP1-1);
+	uint32_t addr_tag=(addr>>(GROUP_WIDTH1+DATA_WIDTH));
+	uint32_t group=(addr>>DATA_WIDTH) & (NR_GROUP1-1);
 	uint32_t addr_data=addr & (NR_DATA-1);
 
 	bool success=false;
@@ -73,7 +73,7 @@ void cache1_write(hwaddr_t addr,size_t len,uint32_t buf) {
 }
 
 uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
-	uint32_t group=(addr>>DATA_WIDTH1) & (NR_GROUP1-1);
+	uint32_t group=(addr>>DATA_WIDTH) & (NR_GROUP1-1);
 	uint32_t offset=addr & (NR_DATA-1);
 	uint32_t block=cache1_read(addr);
 	uint8_t temp[4];
