@@ -77,6 +77,7 @@ uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
 	uint32_t offset=addr & (NR_DATA-1);
 	int block=cache1_read(addr);
 	uint8_t temp[4];
+	memset(temp,0,sizeof(temp));
 
 	if(offset + len >= NR_DATA) {
 		uint32_t _block = cache1_read(addr + len);
