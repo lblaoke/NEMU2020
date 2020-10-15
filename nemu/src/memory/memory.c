@@ -18,7 +18,7 @@ void dram_write(hwaddr_t, size_t, uint32_t);
 /* Memory accessing interfaces */
 struct Cache1 {
 	uint8_t data[NR_DATA];
-	int32_t tag;
+	uint32_t tag;
 	bool valid;
 } cache1[NR_GROUP1][NR_IN1];
 
