@@ -23,7 +23,7 @@ struct Cache1 {
 } cache1[NR_GROUP1][NR_IN1];
 
 void init_cache() {
-	int i, j;
+	uint32_t i, j;
 	for(i = 0; i < NR_GROUP1; i ++) {
 		for(j = 0; j < NR_IN1; j ++) {
 			cache1[i][j].valid = false;
@@ -31,13 +31,13 @@ void init_cache() {
 	}
 }
 
-int cache1_read(hwaddr_t addr) {
+uint32_t cache1_read(hwaddr_t addr) {
 	srand(0);
 	uint32_t addr_tag=(addr>>(GROUP_WIDTH1+DATA_WIDTH1));
 	uint32_t group=(addr>>DATA_WIDTH1) & (NR_GROUP1-1);
 
 	bool success=false;
-	int in,i;
+	uint32_t in,i;
 	for(in=0;in<NR_IN1;in++) if(cache1[group][in].valid && cache1[group][in].tag==addr_tag) {
 		success=true;
 		break;
@@ -62,7 +62,7 @@ void cache1_write(hwaddr_t addr,size_t len,uint32_t buf) {
 	uint32_t addr_data=addr & (NR_DATA-1);
 
 	bool success=false;
-	int in;
+	uint32_t in;
 	for(in=0;in<NR_IN1;in++) if(cache1[group][in].valid && cache1[group][in].tag==addr_tag) {
 		success=true;
 		break;
@@ -75,7 +75,7 @@ void cache1_write(hwaddr_t addr,size_t len,uint32_t buf) {
 uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
 	uint32_t group=(addr>>DATA_WIDTH1) & (NR_GROUP1-1);
 	uint32_t offset=addr & (NR_DATA-1);
-	int block=cache1_read(addr);
+	uint32_t block=cache1_read(addr);
 	uint8_t temp[4];
 	memset(temp,0,sizeof(temp));
 
@@ -85,7 +85,7 @@ uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
 		memcpy(temp + NR_DATA - offset,cache1[group][_block].data, len - (NR_DATA - offset));
 	} else memcpy(temp,cache1[group][block].data + offset,len);
 
-	int zero=0;
+	uint32_t zero=0;
 	return unalign_rw(temp+zero, 4) & (~0u >> ((4 - len) << 3)); 
 }
 
