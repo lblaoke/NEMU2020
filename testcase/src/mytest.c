@@ -13,7 +13,7 @@ int c[8]={0,0,0,0,1,1,1,1};
 
 int q[3]={1,2,3};
 
-int fbd[5000]={0};
+int fbd[500]={0};
 
 int f(int x) {
 	if(x<=0) return x;
