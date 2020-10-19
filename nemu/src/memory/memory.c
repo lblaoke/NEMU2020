@@ -92,7 +92,7 @@ uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
 	} else memcpy(temp,cache1[group1][block1].data + offset,len);
 
 	uint32_t zero=0;
-	return unalign_rw(temp+zero, 4) & (~0u >> ((4 - len) << 3)); 
+	return unalign_rw(temp+zero, 4) & (~0u >> ((4 - len) << 3));
 }
 
 void hwaddr_write(hwaddr_t addr, size_t len, uint32_t buf) {
