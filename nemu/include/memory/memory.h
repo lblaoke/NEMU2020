@@ -25,6 +25,15 @@ extern uint8_t *hw_mem;
 	hwa_to_va(addr); \
 })
 
+typedef union {
+	uint32_t address;
+	struct {
+		uint32_t tag1	:32-GROUP_WIDTH1-DATA_WIDTH;
+		uint32_t group1	:GROUP_WIDTH1;
+		uint32_t offset	:DATA_WIDTH;
+	};
+} Address;
+
 typedef struct {
 	bool valid;
 	uint32_t tag;
@@ -39,8 +48,8 @@ typedef struct {
 Cache1 cache1[NR_GROUP1*NR_IN1];
 
 void cache_init();
-uint32_t cache1_read(hwaddr_t);
-void cache1_write(hwaddr_t,size_t,uint32_t);
+uint32_t cache1_read(Address);
+void cache1_write(Address,size_t,uint32_t);
 
 void ddr3_read(hwaddr_t, void *);
 uint32_t dram_read(hwaddr_t, size_t);
