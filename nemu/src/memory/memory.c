@@ -26,7 +26,9 @@ void init_cache() {
 	uint32_t i, j;
 	for(i = 0; i < NR_GROUP1; i ++) {
 		for(j = 0; j < NR_IN1; j ++) {
-			cache1[i][j].valid = false;
+			memset(cache1[i][j].data,0,NR_DATA);
+			cache1[i][j].tag=0;
+			cache1[i][j].valid=false;
 		}
 	}
 }
