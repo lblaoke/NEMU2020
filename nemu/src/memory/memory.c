@@ -80,11 +80,11 @@ uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
 	uint32_t group2=((addr+len)>>DATA_WIDTH) & (NR_GROUP1-1);
 	uint32_t offset=addr & (NR_DATA-1);
 	uint32_t block=cache1_read(addr);
+	uint32_t _block=cache1_read(addr+len);
 	uint8_t temp[4];
 	memset(temp,0,sizeof(temp));
 
 	if(offset + len >= NR_DATA) {
-		uint32_t _block = cache1_read(addr + len);
 		memcpy(temp,cache1[group1][block].data + offset, NR_DATA - offset);
 		memcpy(temp + NR_DATA - offset,cache1[group2][_block].data, len - (NR_DATA - offset));
 	} else memcpy(temp,cache1[group1][block].data + offset,len);
