@@ -76,7 +76,8 @@ void cache1_write(hwaddr_t addr,size_t len,uint32_t buf) {
 }
 
 uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
-	uint32_t group=(addr>>DATA_WIDTH) & (NR_GROUP1-1);
+	uint32_t group1=(addr>>DATA_WIDTH) & (NR_GROUP1-1);
+	uint32_t group2=((addr+len)>>DATA_WIDTH) & (NR_GROUP1-1);
 	uint32_t offset=addr & (NR_DATA-1);
 	uint32_t block=cache1_read(addr);
 	uint8_t temp[4];
@@ -84,9 +85,9 @@ uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
 
 	if(offset + len >= NR_DATA) {
 		uint32_t _block = cache1_read(addr + len);
-		memcpy(temp,cache1[group][block].data + offset, NR_DATA - offset);
-		memcpy(temp + NR_DATA - offset,cache1[group][_block].data, len - (NR_DATA - offset));
-	} else memcpy(temp,cache1[group][block].data + offset,len);
+		memcpy(temp,cache1[group1][block].data + offset, NR_DATA - offset);
+		memcpy(temp + NR_DATA - offset,cache1[group2][_block].data, len - (NR_DATA - offset));
+	} else memcpy(temp,cache1[group1][block].data + offset,len);
 
 	uint32_t zero=0;
 	return unalign_rw(temp+zero, 4) & (~0u >> ((4 - len) << 3)); 
