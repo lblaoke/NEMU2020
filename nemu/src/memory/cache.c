@@ -49,10 +49,21 @@ uint32_t cache2_read(Address addr) {
 void cache1_write(Address addr,size_t len,uint32_t buf) {
 	uint32_t block,start=addr.group1*NR_IN1,end=(addr.group1+1)*NR_IN1;
 
-	dram_write(addr.address,len,buf);
+	cache2_write(addr,len,buf);
 
 	for(block=start;block<end;block++) if(cache1[block].valid && cache1[block].tag==addr.tag1) {
-		memcpy(cache1[block].data+addr.offset,&buf,len);
+		uint32_t block2=cache2_read(addr);
+		memcpy(cache1[block].data,cache2[block2].data,NR_DATA);
+		break;
+	}
+}
+void cache2_write(Address addr,size_t len,uint32_t buf) {
+	uint32_t block,start=addr.group2*NR_IN2,end=(addr.group2+1)*NR_IN2;
+
+	dram_write(addr.address,len,buf);
+
+	for(block=start;block<end;block++) if(cache2[block].valid && cache2[block].tag==addr.tag2) {
+		memcpy(cache2[block].data+addr.offset,&buf,len);
 		break;
 	}
 }
