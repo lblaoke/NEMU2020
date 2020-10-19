@@ -5,6 +5,14 @@
 
 #define HW_MEM_SIZE (128 * 1024 * 1024)
 
+#define DATA_WIDTH 6
+#define GROUP_WIDTH1 7
+#define IN_WIDTH1 3
+
+#define NR_DATA (1<<DATA_WIDTH)
+#define NR_GROUP1 (1<<GROUP_WIDTH1)
+#define NR_IN1 (1<<IN_WIDTH1)
+
 extern uint8_t *hw_mem;
 
 /* convert the hardware address in the test program to virtual address in NEMU */
@@ -16,6 +24,28 @@ extern uint8_t *hw_mem;
 	Assert(addr < HW_MEM_SIZE, "physical address(0x%08x) is out of bound", addr); \
 	hwa_to_va(addr); \
 })
+
+typedef struct {
+	bool valid;
+	uint32_t tag;
+	uint8_t data[NR_DATA];	
+}Cache1;
+typedef struct {
+	bool valid,dirty;
+	uint32_t tag;
+	uint8_t data[NR_DATA];	
+}Cache2;
+
+Cache1 cache1[NR_GROUP1*NR_IN1];
+
+void cache_init();
+uint32_t cache1_read(hwaddr_t);
+void cache1_write(hwaddr_t,size_t,uint32_t);
+
+void ddr3_read(hwaddr_t, void *);
+uint32_t dram_read(hwaddr_t, size_t);
+void ddr3_write(hwaddr_t, void *, uint8_t *);
+void dram_write(hwaddr_t, size_t, uint32_t);
 
 uint32_t swaddr_read(swaddr_t, size_t);
 uint32_t lnaddr_read(lnaddr_t, size_t);
