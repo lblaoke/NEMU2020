@@ -23,7 +23,7 @@ uint32_t cache1_read(Address addr) {
 	}
 
 	//load new data
-	addr.address=((addr.address>>DATA_WIDTH)<<DATA_WIDTH);
+	addr.address-=addr.offset;
 	uint32_t i;
 	for(i=0;i<NR_DATA;i+=BURST_LEN) ddr3_read(addr.address+i,cache1[block].data+i);
 	cache1[block].tag=addr.tag1;
