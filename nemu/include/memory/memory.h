@@ -59,7 +59,9 @@ Cache2 cache2[NR_GROUP2*NR_IN2];
 
 void cache_init();
 uint32_t cache1_read(Address);
+uint32_t cache2_read(Address);
 void cache1_write(Address,size_t,uint32_t);
+void cache2_write(Address,size_t,uint32_t);
 
 void ddr3_read(hwaddr_t, void *);
 uint32_t dram_read(hwaddr_t, size_t);

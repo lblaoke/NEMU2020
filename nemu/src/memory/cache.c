@@ -6,6 +6,7 @@
 void init_cache() {
 	uint32_t block;
 	for(block=0;block<NR_GROUP1*NR_IN1;block++) cache1[block].valid=false;
+	for(block=0;block<NR_GROUP2*NR_IN2;block++) cache2[block].valid=false;
 }
 
 uint32_t cache1_read(Address addr) {
@@ -15,19 +16,32 @@ uint32_t cache1_read(Address addr) {
 
 	//find free cache
 	for(block=start;block<end && cache1[block].valid;block++);
-	
-	//swap
 	if(block>=end) {
 		srand(0);
 		block=start+rand()%NR_IN1;
 	}
 
-	//load new data
+	uint32_t block2=cache2_read(addr);
+	memcpy(cache1[block].data,cache2[block2].data,NR_DATA);
+
+	return block;
+}
+uint32_t cache2_read(Address addr) {
+	uint32_t i,block,start=addr.group2*NR_IN2,end=(addr.group2+1)*NR_IN2;
+
+	for(block=start;block<end;block++) if(cache2[block].valid && cache2[block].tag==addr.tag2) return block;
+
+	//find free cache
+	for(block=start;block<end && cache2[block].valid;block++);
+	if(block>=end) {
+		srand(0);
+		block=start+rand()%NR_IN2;
+	}
+
 	addr.address-=addr.offset;
-	uint32_t i;
-	for(i=0;i<NR_DATA;i+=BURST_LEN) ddr3_read(addr.address+i,cache1[block].data+i);
-	cache1[block].tag=addr.tag1;
-	cache1[block].valid=true;
+	for(i=0;i<NR_DATA;i+=BURST_LEN) ddr3_read(addr.address+i,cache2[block].data+i);
+	cache2[block].tag=addr.tag2;
+	cache2[block].valid=true;
 
 	return block;
 }
