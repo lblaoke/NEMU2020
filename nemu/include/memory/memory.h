@@ -27,9 +27,9 @@ extern uint8_t *hw_mem;
 
 typedef union {
 	struct {
-		uint32_t tag1	:(32-GROUP_WIDTH1-DATA_WIDTH);
-		uint32_t group1	:GROUP_WIDTH1;
 		uint32_t offset	:DATA_WIDTH;
+		uint32_t group1	:GROUP_WIDTH1;
+		uint32_t tag1	:(32-GROUP_WIDTH1-DATA_WIDTH);
 	};
 	uint32_t address;
 } Address;
