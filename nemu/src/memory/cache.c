@@ -38,8 +38,7 @@ uint32_t cache2_read(Address addr) {
 
 	addr.address-=addr.offset;
 
-	//if(block>=end) {
-	{
+	if(block>=end) {
 		srand(0);
 		block=start;//start+rand()%NR_IN2;
 		if(cache2[block].dirty) {

@@ -76,6 +76,8 @@ int main() {
 		nemu_assert(q[i%2]==i);
 	}
 
+	for(i=0;i<5000;i++) fbd[i]=i;
+
 	int b=1;
 	for(i=0;i<10000;i++) {
 		fbd[0]=i;
