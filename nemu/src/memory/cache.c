@@ -22,6 +22,8 @@ uint32_t cache1_read(Address addr) {
 	}
 
 	uint32_t block2=cache2_read(addr);
+	cache1[block].valid=true;
+	cache1[block].tag=addr.tag1;
 	memcpy(cache1[block].data,cache2[block2].data,NR_DATA);
 
 	return block;
@@ -33,15 +35,23 @@ uint32_t cache2_read(Address addr) {
 
 	//find free cache
 	for(block=start;block<end && cache2[block].valid;block++);
+
+	addr.address-=addr.offset;
+
 	if(block>=end) {
 		srand(0);
 		block=start+rand()%NR_IN2;
+		if(cache2[block].dirty) {
+			uint8_t mask[BURST_LEN<<1];
+			memset(mask,1,BURST_LEN<<1);
+			for(i=0;i<NR_DATA;i+=BURST_LEN) ddr3_write(addr.address+i,cache2[block].data+i,mask);
+		}
 	}
 
-	addr.address-=addr.offset;
-	for(i=0;i<NR_DATA;i+=BURST_LEN) ddr3_read(addr.address+i,cache2[block].data+i);
-	cache2[block].tag=addr.tag2;
 	cache2[block].valid=true;
+	cache2[block].dirty=false;
+	cache2[block].tag=addr.tag2;
+	for(i=0;i<NR_DATA;i+=BURST_LEN) ddr3_read(addr.address+i,cache2[block].data+i);
 
 	return block;
 }
@@ -60,10 +70,12 @@ void cache1_write(Address addr,size_t len,uint32_t buf) {
 void cache2_write(Address addr,size_t len,uint32_t buf) {
 	uint32_t block,start=addr.group2*NR_IN2,end=(addr.group2+1)*NR_IN2;
 
-	dram_write(addr.address,len,buf);
-
 	for(block=start;block<end;block++) if(cache2[block].valid && cache2[block].tag==addr.tag2) {
+		cache2[block].dirty=true;
 		memcpy(cache2[block].data+addr.offset,&buf,len);
-		break;
+		return;
 	}
+
+	dram_write(addr.address,len,buf);
+	cache2_read(addr);
 }
