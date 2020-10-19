@@ -78,7 +78,9 @@ int main() {
 
 	for(i=0;i<10000;i++) {
 		fbd[0]=i;
-		fbd[100]=fbd[0];
+		int a=fbd[0];
+		a++;
+		fbd[0]=a;
 	}
 
 	return 0;
