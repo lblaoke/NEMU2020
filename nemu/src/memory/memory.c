@@ -7,22 +7,22 @@ uint32_t hwaddr_read(hwaddr_t addr,size_t len) {
 	Address A;
 	A.address=addr;
 
-	uint32_t block1=cache1_read(A);
+	uint32_t block1=cache1_read(A),OFFSET=A.offset,zero=0;
 
 	uint8_t temp[4];
 	memset(temp,0,sizeof(temp));
 
-	if(A.offset + len >= NR_DATA) {
-		memcpy(temp,cache1[block1].data + A.offset, NR_DATA - A.offset);
+	if(OFFSET+len<NR_DATA) {
+		memcpy(temp,cache1[block1].data + OFFSET,len);
+	} else {
+		memcpy(temp,cache1[block1].data + OFFSET, NR_DATA - OFFSET);
 
-		Address B;
-		B.address=A.address+len;
-		uint32_t block2=cache1_read(B);
+		A.address+=len;
+		uint32_t block2=cache1_read(A);
 
-		memcpy(temp + NR_DATA - A.offset,cache1[block2].data, len - (NR_DATA - A.offset));
-	} else memcpy(temp,cache1[block1].data + A.offset,len);
+		memcpy(temp + NR_DATA - OFFSET,cache1[block2].data, len - (NR_DATA - OFFSET));
+	}
 
-	uint32_t zero=0;
 	return unalign_rw(temp+zero, 4) & (~0u >> ((4 - len) << 3));
 }
 

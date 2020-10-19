@@ -9,9 +9,9 @@
 #define GROUP_WIDTH1 7
 #define IN_WIDTH1 3
 
-#define NR_DATA (1<<DATA_WIDTH)
-#define NR_GROUP1 (1<<GROUP_WIDTH1)
-#define NR_IN1 (1<<IN_WIDTH1)
+#define NR_DATA 64
+#define NR_GROUP1 128
+#define NR_IN1 8
 
 extern uint8_t *hw_mem;
 
