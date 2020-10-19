@@ -65,23 +65,13 @@ void cache1_write(hwaddr_t addr,size_t len,uint32_t buf) {
 	uint32_t addr_data=addr & (NR_DATA-1);
 
 	bool success=false;
-	uint32_t in,i;
+	uint32_t in;
 	for(in=0;in<NR_IN1;in++) if(cache1[group][in].valid && cache1[group][in].tag==addr_tag) {
 		success=true;
 		break;
 	}
 
-	uint8_t mask[BURST_LEN<<1];
-	memset(mask,1,BURST_LEN<<1);
-
-	uint8_t buffer[NR_DATA];
-	memset(buffer,0,NR_DATA);
-
-	memcpy(buffer+addr_data,&buf,len);
-
-	uint32_t start=addr & (~(NR_DATA-1));
-	for(i=0;i<NR_DATA/BURST_LEN;i++) ddr3_write(start+i*BURST_LEN,buffer+i*BURST_LEN,mask);
-
+	dram_write(addr,len,buf);
 	if(success) memcpy(cache1[group][in].data+addr_data,&buf,len);
 }
 
