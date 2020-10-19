@@ -33,11 +33,8 @@ void init_cache() {
 	}
 }
 
-uint32_t cache1_read(hwaddr_t addr) {
+uint32_t cache1_read(hwaddr_t addr,uint32_t addr_tag,uint32_t group) {
 	srand(0);
-	uint32_t addr_tag=(addr>>(GROUP_WIDTH1+DATA_WIDTH));
-	uint32_t group=(addr>>DATA_WIDTH) & (NR_GROUP1-1);
-
 	bool success=false;
 	uint32_t in,i;
 	for(in=0;in<NR_IN1;in++) if(cache1[group][in].valid && cache1[group][in].tag==addr_tag) {
@@ -59,11 +56,7 @@ uint32_t cache1_read(hwaddr_t addr) {
 	return in;
 }
 
-void cache1_write(hwaddr_t addr,size_t len,uint32_t buf) {
-	uint32_t addr_tag=(addr>>(GROUP_WIDTH1+DATA_WIDTH));
-	uint32_t group=(addr>>DATA_WIDTH) & (NR_GROUP1-1);
-	uint32_t addr_data=addr & (NR_DATA-1);
-
+void cache1_write(hwaddr_t addr,size_t len,uint32_t buf,uint32_t addr_tag,uint32_t group,uint32_t offset) {
 	bool success=false;
 	uint32_t in;
 	for(in=0;in<NR_IN1;in++) if(cache1[group][in].valid && cache1[group][in].tag==addr_tag) {
@@ -72,31 +65,36 @@ void cache1_write(hwaddr_t addr,size_t len,uint32_t buf) {
 	}
 
 	dram_write(addr,len,buf);
-	if(success) memcpy(cache1[group][in].data+addr_data,&buf,len);
+	if(success) memcpy(cache1[group][in].data+offset,&buf,len);
 }
 
-uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
-	uint32_t group1=(addr>>DATA_WIDTH) & (NR_GROUP1-1);
+uint32_t hwaddr_read(hwaddr_t addr,size_t len) {
+	uint32_t addr_tag=(addr>>(GROUP_WIDTH1+DATA_WIDTH));
+	uint32_t group=(addr>>DATA_WIDTH) & (NR_GROUP1-1);
 	uint32_t offset=addr & (NR_DATA-1);
-	uint32_t block1=cache1_read(addr);
+	uint32_t block1=cache1_read(addr,addr_tag,group);
 
 	uint8_t temp[4];
 	memset(temp,0,sizeof(temp));
 
 	if(offset + len >= NR_DATA) {
 		uint32_t group2=((addr+len)>>DATA_WIDTH) & (NR_GROUP1-1);
-		uint32_t block2=cache1_read(addr+len);
+		uint32_t block2=cache1_read(addr+len,addr_tag,group2);
 
-		memcpy(temp,cache1[group1][block1].data + offset, NR_DATA - offset);
+		memcpy(temp,cache1[group][block1].data + offset, NR_DATA - offset);
 		memcpy(temp + NR_DATA - offset,cache1[group2][block2].data, len - (NR_DATA - offset));
-	} else memcpy(temp,cache1[group1][block1].data + offset,len);
+	} else memcpy(temp,cache1[group][block1].data + offset,len);
 
 	uint32_t zero=0;
 	return unalign_rw(temp+zero, 4) & (~0u >> ((4 - len) << 3));
 }
 
 void hwaddr_write(hwaddr_t addr, size_t len, uint32_t buf) {
-	cache1_write(addr, len, buf);
+	uint32_t tag=(addr>>(GROUP_WIDTH1+DATA_WIDTH));
+	uint32_t group=(addr>>DATA_WIDTH) & (NR_GROUP1-1);
+	uint32_t offset=addr & (NR_DATA-1);
+
+	cache1_write(addr,len,buf,tag,group,offset);
 }
 
 
