@@ -23,7 +23,7 @@ struct Cache1 {
 } cache1[NR_GROUP1*NR_IN1];
 
 uint32_t TAG,GROUP,OFFSET;
-#define cache1(i,j) cache1[i*NR_GROUP1+j]
+#define cache1(i,j) cache1[i*NR_IN1+j]
 
 void init_cache() {
 	uint32_t i, j;
