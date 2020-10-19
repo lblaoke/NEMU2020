@@ -51,26 +51,31 @@ uint32_t cache1_read(hwaddr_t addr) {
 		if(in>=NR_IN1) in=rand()%NR_IN1;
 
 		uint32_t start=addr & (~(NR_DATA-1));
-		for(i=0;i<BURST_LEN;i++) ddr3_read(start+i*BURST_LEN,cache1[group][in].data+i*BURST_LEN);
+		for(i=0;i<NR_DATA/BURST_LEN;i++) ddr3_read(start+i*BURST_LEN,cache1[group][in].data+i*BURST_LEN);
 		cache1[group][in].tag=addr_tag;
 		cache1[group][in].valid=true;
 	}
 
 	return in;
 }
+
 void cache1_write(hwaddr_t addr,size_t len,uint32_t buf) {
 	uint32_t addr_tag=(addr>>(GROUP_WIDTH1+DATA_WIDTH));
 	uint32_t group=(addr>>DATA_WIDTH) & (NR_GROUP1-1);
 	uint32_t addr_data=addr & (NR_DATA-1);
 
 	bool success=false;
-	uint32_t in;
+	uint32_t in,i;
 	for(in=0;in<NR_IN1;in++) if(cache1[group][in].valid && cache1[group][in].tag==addr_tag) {
 		success=true;
 		break;
 	}
 
-	dram_write(addr,len,buf);
+	uint8_t mask[BURST_LEN<<1];
+	memset(mask,1,BURST_LEN<<1);
+	uint32_t start=addr & (~(NR_DATA-1));
+	for(i=0;i<NR_DATA/BURST_LEN;i++) ddr3_write(start+i*BURST_LEN,&buf+i*BURST_LEN,mask);
+
 	if(success) memcpy(cache1[group][in].data+addr_data,&buf,len);
 }
 
