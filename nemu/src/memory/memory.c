@@ -15,8 +15,9 @@ uint32_t hwaddr_read(hwaddr_t addr,size_t len) {
 	if(A.offset + len >= NR_DATA) {
 		memcpy(temp,cache1[block1].data + A.offset, NR_DATA - A.offset);
 
-		A.address+=len;
-		uint32_t block2=cache1_read(A);
+		Address B;
+		B.address=A.address+len;
+		uint32_t block2=cache1_read(B);
 
 		memcpy(temp + NR_DATA - A.offset,cache1[block2].data, len - (NR_DATA - A.offset));
 	} else memcpy(temp,cache1[block1].data + A.offset,len);
