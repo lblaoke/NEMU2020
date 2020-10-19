@@ -20,39 +20,40 @@ struct Cache1 {
 	uint8_t data[NR_DATA];
 	uint32_t tag;
 	bool valid;
-} cache1[NR_GROUP1][NR_IN1];
+} cache1[NR_GROUP1*NR_IN1];
+
+uint32_t TAG,GROUP,OFFSET;
+#define cache1(i,j) cache1[i*NR_GROUP1+j]
 
 void init_cache() {
 	uint32_t i, j;
 	for(i = 0; i < NR_GROUP1; i ++) {
 		for(j = 0; j < NR_IN1; j ++) {
-			memset(cache1[i][j].data,0,NR_DATA);
-			cache1[i][j].tag=0;
-			cache1[i][j].valid=false;
+			memset(cache1(i,j).data,0,NR_DATA);
+			cache1(i,j).tag=0;
+			cache1(i,j).valid=false;
 		}
 	}
 }
-
-uint32_t TAG,GROUP,OFFSET;
 
 uint32_t cache1_read(hwaddr_t addr) {
 	srand(0);
 	bool success=false;
 	uint32_t in,i;
-	for(in=0;in<NR_IN1;in++) if(cache1[GROUP][in].valid && cache1[GROUP][in].tag==TAG) {
+	for(in=0;in<NR_IN1;in++) if(cache1(GROUP,in).valid && cache1(GROUP,in).tag==TAG) {
 		success=true;
 		break;
 	}
 
 	if(!success) {
-		for(in=0;in<NR_IN1 && cache1[GROUP][in].valid;in++);
+		for(in=0;in<NR_IN1 && cache1(GROUP,in).valid;in++);
 		
 		if(in>=NR_IN1) in=rand()%NR_IN1;
 
 		uint32_t start=((addr>>DATA_WIDTH)<<DATA_WIDTH);
-		for(i=0;i<NR_DATA;i+=BURST_LEN) ddr3_read(start+i,cache1[GROUP][in].data+i);
-		cache1[GROUP][in].tag=TAG;
-		cache1[GROUP][in].valid=true;
+		for(i=0;i<NR_DATA;i+=BURST_LEN) ddr3_read(start+i,cache1(GROUP,in).data+i);
+		cache1(GROUP,in).tag=TAG;
+		cache1(GROUP,in).valid=true;
 	}
 
 	return in;
@@ -61,13 +62,13 @@ uint32_t cache1_read(hwaddr_t addr) {
 void cache1_write(hwaddr_t addr,size_t len,uint32_t buf) {
 	bool success=false;
 	uint32_t in;
-	for(in=0;in<NR_IN1;in++) if(cache1[GROUP][in].valid && cache1[GROUP][in].tag==TAG) {
+	for(in=0;in<NR_IN1;in++) if(cache1(GROUP,in).valid && cache1(GROUP,in).tag==TAG) {
 		success=true;
 		break;
 	}
 
 	dram_write(addr,len,buf);
-	if(success) memcpy(cache1[GROUP][in].data+OFFSET,&buf,len);
+	if(success) memcpy(cache1(GROUP,in).data+OFFSET,&buf,len);
 }
 
 uint32_t hwaddr_read(hwaddr_t addr,size_t len) {
@@ -81,13 +82,13 @@ uint32_t hwaddr_read(hwaddr_t addr,size_t len) {
 	memset(temp,0,sizeof(temp));
 
 	if(OFFSET + len >= NR_DATA) {
-		memcpy(temp,cache1[GROUP][block1].data + OFFSET, NR_DATA - OFFSET);
+		memcpy(temp,cache1(GROUP,block1).data + OFFSET, NR_DATA - OFFSET);
 
 		GROUP=((addr+len)>>DATA_WIDTH) & (NR_GROUP1-1);
 		uint32_t block2=cache1_read(addr+len);
 
-		memcpy(temp + NR_DATA - OFFSET,cache1[GROUP][block2].data, len - (NR_DATA - OFFSET));
-	} else memcpy(temp,cache1[GROUP][block1].data + OFFSET,len);
+		memcpy(temp + NR_DATA - OFFSET,cache1(GROUP,block2).data, len - (NR_DATA - OFFSET));
+	} else memcpy(temp,cache1(GROUP,block1).data + OFFSET,len);
 
 	uint32_t zero=0;
 	return unalign_rw(temp+zero, 4) & (~0u >> ((4 - len) << 3));
