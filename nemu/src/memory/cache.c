@@ -29,7 +29,6 @@ uint32_t cache1_read(Address addr) {
 	return block;
 }
 uint32_t cache2_read(Address addr) {
-	printf("cache2\n");
 	uint32_t i,block,start=addr.group2*NR_IN2,end=(addr.group2+1)*NR_IN2;
 
 	for(block=start;block<end;block++) if(cache2[block].valid && cache2[block].tag==addr.tag2) return block;
@@ -40,7 +39,6 @@ uint32_t cache2_read(Address addr) {
 	addr.address-=addr.offset;
 
 	if(block>=end) {
-		printf("swap!\n");
 		srand(0);
 		block=start+rand()%NR_IN2;
 		if(cache2[block].dirty) {
