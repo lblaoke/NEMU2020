@@ -7,19 +7,19 @@ uint32_t hwaddr_read(hwaddr_t addr,size_t len) {
 	Address A;
 	A.address=addr;
 
-	uint32_t block1=cache2_read(A),OFFSET=A.offset,zero=0;
+	uint32_t block1=cache1_read(A),OFFSET=A.offset,zero=0;
 
 	uint8_t temp[4];
 	memset(temp,0,sizeof(temp));
 
 	if(OFFSET+len<NR_DATA) {
-		memcpy(temp,cache2[block1].data + OFFSET,len);
+		memcpy(temp,cache1[block1].data + OFFSET,len);
 	} else {
 		A.address+=(NR_DATA-OFFSET);
-		uint32_t block2=cache2_read(A);
+		uint32_t block2=cache1_read(A);
 
-		memcpy(temp,cache2[block1].data + OFFSET, NR_DATA - OFFSET);
-		memcpy(temp + NR_DATA - OFFSET,cache2[block2].data, len - (NR_DATA - OFFSET));
+		memcpy(temp,cache1[block1].data + OFFSET, NR_DATA - OFFSET);
+		memcpy(temp + NR_DATA - OFFSET,cache1[block2].data, len - (NR_DATA - OFFSET));
 	}
 
 	return unalign_rw(temp+zero, 4) & (~0u >> ((4 - len) << 3));
@@ -28,7 +28,7 @@ uint32_t hwaddr_read(hwaddr_t addr,size_t len) {
 void hwaddr_write(hwaddr_t addr, size_t len, uint32_t buf) {
 	Address A;
 	A.address=addr;
-	cache2_write(A,len,buf);
+	cache1_write(A,len,buf);
 }
 
 
