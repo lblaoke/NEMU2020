@@ -6,9 +6,9 @@
 #define GROUP_WIDTH1 7
 #define IN_WIDTH1 3
 
-#define NR_DATA (1 << DATA_WIDTH)
-#define NR_GROUP1 (1 << GROUP_WIDTH1)
-#define NR_IN1 (1 << IN_WIDTH1)
+#define NR_DATA 64
+#define NR_GROUP1 128
+#define NR_IN1 8
 
 void ddr3_read(hwaddr_t, void *);
 uint32_t dram_read(hwaddr_t, size_t);
@@ -17,9 +17,9 @@ void dram_write(hwaddr_t, size_t, uint32_t);
 
 /* Memory accessing interfaces */
 struct Cache1 {
-	bool valid;
-	uint32_t tag;
 	uint8_t data[NR_DATA];
+	uint32_t tag;
+	bool valid;
 } cache1[NR_GROUP1][NR_IN1];
 
 uint32_t TAG,GROUP,OFFSET;
