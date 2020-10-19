@@ -80,5 +80,6 @@ void cache2_write(Address addr,size_t len,uint32_t buf) {
 	}
 
 	dram_write(addr.address,len,buf);
-	cache2_read(addr);
+	block=cache2_read(addr);
+	memcpy(cache2[block].data+addr.offset,&buf,len);
 }
