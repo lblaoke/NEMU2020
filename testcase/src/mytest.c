@@ -13,7 +13,7 @@ int c[8]={0,0,0,0,1,1,1,1};
 
 int q[3]={1,2,3};
 
-int fbd[10000]={0};
+int fbd[5000]={0};
 
 int f(int x) {
 	if(x<=0) return x;
@@ -23,7 +23,7 @@ int f(int x) {
 int main() {
 
 	int i;
-/*
+
 	for(i=0;i<8;i++) {
 		nemu_assert(!(a[i] && b[i])==(!a[i] || !b[i]));
 		nemu_assert(!(a[i] || b[i])==(!a[i] && !b[i]));
@@ -75,7 +75,7 @@ int main() {
 		q[i%2]=i;
 		nemu_assert(q[i%2]==i);
 	}
-*/
+
 	for(i=0;i<100;i++) {
 		fbd[0]=i;
 		fbd[1]=i;
