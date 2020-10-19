@@ -13,6 +13,8 @@ int c[8]={0,0,0,0,1,1,1,1};
 
 int q[3]={1,2,3};
 
+uint32_t fbd[10000];
+
 int f(int x) {
 	if(x<=0) return x;
 	return 1+f(x-1);
@@ -72,6 +74,11 @@ int main() {
 	for(i=0;i<100;i++) {
 		q[i%2]=i;
 		nemu_assert(q[i%2]==i);
+	}
+
+	for(i=0;i<100;i++) {
+		fbd[0]=i;
+		fbd[1]=i;
 	}
 
 	return 0;
