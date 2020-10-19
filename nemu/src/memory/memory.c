@@ -73,7 +73,14 @@ void cache1_write(hwaddr_t addr,size_t len,uint32_t buf) {
 
 	uint8_t mask[BURST_LEN<<1];
 	memset(mask,1,BURST_LEN<<1);
-	for(i=0;i<32/BURST_LEN;i++) ddr3_write(addr+i*BURST_LEN,&buf+i*BURST_LEN,mask);
+
+	uint8_t buffer[NR_DATA];
+	memset(buffer,0,NR_DATA);
+
+	memcpy(buffer+addr_data,&buf,len);
+
+	uint32_t start=addr & (~(NR_DATA-1));
+	for(i=0;i<NR_DATA/BURST_LEN;i++) ddr3_write(start+i*BURST_LEN,buffer+i*BURST_LEN,mask);
 
 	if(success) memcpy(cache1[group][in].data+addr_data,&buf,len);
 }
