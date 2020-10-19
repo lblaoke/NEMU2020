@@ -18,7 +18,7 @@ uint32_t cache1_read(Address addr) {
 	for(block=start;block<end && cache1[block].valid;block++);
 	if(block>=end) {
 		srand(0);
-		block=start+rand()%NR_IN1;
+		block=start;//start+rand()%NR_IN1;
 	}
 
 	uint32_t block2=cache2_read(addr);
@@ -40,7 +40,7 @@ uint32_t cache2_read(Address addr) {
 
 	if(block>=end) {
 		srand(0);
-		block=start+rand()%NR_IN2;
+		block=start;//start+rand()%NR_IN2;
 		if(cache2[block].dirty) {
 			printf("write back!\n");
 			uint8_t mask[BURST_LEN<<1];
