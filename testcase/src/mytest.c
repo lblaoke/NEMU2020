@@ -70,12 +70,12 @@ int main() {
 	nemu_assert(sqrt(0x40000)==0x20000);
 	sqrt(0x10000);
 
-
+/*
 	for(i=0;i<100;i++) {
 		q[i%2]=i;
 		nemu_assert(q[i%2]==i);
 	}
-/*
+
 	for(i=0;i<100;i++) {
 		fbd[0]=i;
 		fbd[1]=i;
