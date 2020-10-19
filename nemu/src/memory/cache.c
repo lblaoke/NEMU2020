@@ -16,10 +16,9 @@ uint32_t cache1_read(Address addr) {
 
 	//find free cache
 	for(block=start;block<end && cache1[block].valid;block++);
-	//if(block>=end) {
-	{
+	if(block>=end) {
 		srand(0);
-		block=start;//start+rand()%NR_IN1;
+		block=start+rand()%NR_IN1;
 	}
 
 	uint32_t block2=cache2_read(addr);
