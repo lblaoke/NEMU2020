@@ -75,10 +75,17 @@ void cache2_write(Address addr,size_t len,uint32_t buf) {
 
 	for(block=start;block<end;block++) if(cache2[block].valid && cache2[block].tag==addr.tag2) {
 		cache2[block].dirty=true;
-		memcpy(cache2[block].data+addr.offset,&buf,len);
+		if(addr.offset+len<NR_DATA) memcpy(cache2[block].data+addr.offset,&buf,len);
+		else {
+			memcpy(cache2[block].data+addr.offset,&buf,NR_DATA-addr.offset);
+			Address B;
+			B.address=addr.address+len;
+			cache2_write(B,len-(NR_DATA-addr.offset),buf>>(NR_DATA-addr.offset));
+		}
 		return;
 	}
 
-	dram_write(addr.address,len,buf);
 	block=cache2_read(addr);
+	cache2[block].dirty=true;
+	memcpy(cache2[block].data+addr.offset,&buf,len);
 }
