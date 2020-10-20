@@ -21,7 +21,7 @@ int f(int x) {
 }
 
 int main() {
-
+/*
 	int i;
 
 	for(i=0;i<8;i++) {
@@ -75,7 +75,7 @@ int main() {
 		q[i%2]=i;
 		nemu_assert(q[i%2]==i);
 	}
-
+*/
 	for(i=0;i<5000;i++) fbd[i]=i;
 
 	int b=1;
