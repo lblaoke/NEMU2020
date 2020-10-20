@@ -48,12 +48,9 @@ uint32_t cache2_read(Address addr) {
 			Address B;
 			B.address=0;
 			B.tag2=cache2[block].tag;
-			B.group2=block;
+			B.group2=block/NR_IN2;
 
-			//for(i=0;i<NR_DATA;i+=BURST_LEN) ddr3_write(B.address+i,cache2[block].data+i,mask);
-			for(i=0;i<NR_DATA;i++) {
-				dram_write(B.address+i,1,cache2[block].data[i]);
-			}
+			for(i=0;i<NR_DATA;i+=BURST_LEN) ddr3_write(B.address+i,cache2[block].data+i,mask);
 		}
 	}
 
