@@ -43,12 +43,12 @@ int main() {
 	nemu_assert(100/3==33);
 
 	for(i=0;i<8;i++) nemu_assert(i==f(i));
-/*
+
 	int d=10;
 	int *p=&d;
 	(*p)++;
 	nemu_assert(d==11);
-
+/*
 	memset(buf,0xf,sizeof(buf));
 	buf[127]=0;
 	nemu_assert(strlen(buf)==127);
