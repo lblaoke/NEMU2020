@@ -21,9 +21,9 @@ int f(int x) {
 }
 
 int main() {
-/*
-	int i;
 
+	int i;
+/*
 	for(i=0;i<8;i++) {
 		nemu_assert(!(a[i] && b[i])==(!a[i] || !b[i]));
 		nemu_assert(!(a[i] || b[i])==(!a[i] && !b[i]));
