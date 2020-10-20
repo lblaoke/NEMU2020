@@ -41,9 +41,9 @@ uint32_t cache2_read(Address addr) {
 	{
 		block=start;//+rand()%NR_IN2;
 		if(cache2[block].valid && cache2[block].dirty) {
-			printf("write back: %d,%d\n",block/NR_IN2,block%NR_IN2);
-			uint8_t mask[BURST_LEN<<1];
-			memset(mask,1,BURST_LEN<<1);
+			//printf("write back: %d,%d\n",block/NR_IN2,block%NR_IN2);
+			uint8_t mask[BURST_LEN*2];
+			memset(mask,1,BURST_LEN*2);
 
 			Address B;
 			B.address=0;
