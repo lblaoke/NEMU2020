@@ -19,8 +19,9 @@ static void do_execute() {
 
 #if DATA_BYTE == 4
 make_helper(ljmp) {
+	extern SegDesc *seg_des;
 	SegDesc seg;
-	SegDesc *seg_des=&seg;
+	seg_des=&seg;
 
 	uint32_t op1 = instr_fetch(eip+1, 4)-7;
 	uint16_t op2 = instr_fetch(eip +5, 2);
