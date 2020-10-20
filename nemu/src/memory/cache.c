@@ -76,16 +76,14 @@ void cache2_write(Address addr,size_t len,uint32_t buf) {
 	if(block>=end) block=cache2_read(addr);
 
 	cache2[block].dirty=true;
+	uint8_t temp[4];
+	memcpy(temp,&buf,4);
 	//memcpy(cache2[block].data+OFFSET,&buf,len);
 
 	if(OFFSET+len<NR_DATA) {
-		memcpy(cache2[block].data+OFFSET,&buf,len);
+		memcpy(cache2[block].data+OFFSET,temp,len);
 	} else {
-		memcpy(cache2[block].data+OFFSET,&buf,NR_DATA-OFFSET);
-
-		uint8_t temp[4];
-		memset(temp,0,sizeof(temp));
-		memcpy(temp,&buf,sizeof(buf));
+		memcpy(cache2[block].data+OFFSET,temp,NR_DATA-OFFSET);
 
 		addr.address+=(NR_DATA-OFFSET);
 		block=cache2_read(addr);
