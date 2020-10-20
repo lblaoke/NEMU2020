@@ -55,7 +55,7 @@ int main() {
 
 	strcpy(buf,str);
 	nemu_assert(!strcmp(str,"mytest"));
-/*
+
 	//sprintf(buf, "%x",F_div_F(int2F(4),int2F(2)));
 	//sprintf(buf, "%x",f2F(2.0));
 	nemu_assert(F_div_F(int2F(-6),int2F(-2))==0x30000);
@@ -75,7 +75,7 @@ int main() {
 		q[i%2]=i;
 		nemu_assert(q[i%2]==i);
 	}
-*/
+
 	for(i=0;i<5000;i++) fbd[i]=i;
 
 	int b=1;
