@@ -77,12 +77,25 @@ void cache1_write(Address addr,size_t len,uint32_t buf) {
 	}
 }
 void cache2_write(Address addr,size_t len,uint32_t buf) {
-	uint32_t block,start=addr.group2*NR_IN2,end=(addr.group2+1)*NR_IN2;
+	uint32_t block,start=addr.group2*NR_IN2,end=(addr.group2+1)*NR_IN2,OFFSET=addr.offset;
 
 	for(block=start;block<end;block++) if(cache2[block].valid && cache2[block].tag==addr.tag2) break;
 	if(block>=end) block=cache2_read(addr);
 
 	cache2[block].dirty=true;
 
-	memcpy(cache2[block].data+addr.offset,&buf,len);
+	if(OFFSET+len<=NR_DATA) memcpy(cache2[block].data+OFFSET,&buf,len);
+	else {
+		printf("overflow!\n");
+		uint8_t temp[4];
+		memcpy(temp,&buf,4);
+
+		memcpy(cache2[block].data+OFFSET,temp,NR_DATA-OFFSET);
+
+		addr.address+=(NR_DATA-OFFSET);
+		block=cache2_read(addr);
+
+		memcpy(cache2[block].data,temp+NR_DATA-OFFSET,len-(NR_DATA-OFFSET));
+	}
+
 }
