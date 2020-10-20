@@ -79,7 +79,7 @@ static int cmd_x(char *args) {
 	if (!suc)assert (1);
 
 	printf("0x%08x:\n",addr);
-	for(i=0;i<n;i++,addr+=4) printf("0x%08x ",swaddr_read(addr,4));
+	for(i=0;i<n;i++,addr+=4) printf("0x%08x ",swaddr_read(addr,4,R_DS));
 	printf("\n");
 	return 0;
 }
@@ -110,10 +110,10 @@ static int cmd_d(char *args) {
 void elf_func(swaddr_t,char *);
 
 void read_ebp (swaddr_t addr , PartOfStackFrame *ebp) {
-	ebp -> prev_ebp = swaddr_read (addr , 4);
-	ebp -> ret_addr = swaddr_read (addr + 4 , 4);
+	ebp -> prev_ebp = swaddr_read (addr , 4, R_SS);
+	ebp -> ret_addr = swaddr_read (addr + 4 , 4, R_SS);
 	int i;
-	for (i = 0;i < 4;i ++) ebp -> args [i] = swaddr_read (addr + 8 + 4 * i , 4);
+	for (i = 0;i < 4;i ++) ebp -> args [i] = swaddr_read (addr + 8 + 4 * i , 4, R_SS);
 }
 static int cmd_bt(char *args) {
 	int j = 0;

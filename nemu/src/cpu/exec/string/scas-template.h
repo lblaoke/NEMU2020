@@ -8,13 +8,13 @@ static void do_execute() {
 	switch(DATA_BYTE) {
 		case 2:
 			a=reg_w(R_AX);
-			dest=swaddr_read(reg_w(R_DI),DATA_BYTE);
+			dest=swaddr_read(reg_w(R_DI),DATA_BYTE,R_ES);
 			if(cpu.DF) reg_w(R_DI)-=DATA_BYTE;
 			else reg_w(R_DI)+=DATA_BYTE;
 			break;
 		default:
 			a=REG(R_EAX);
-			dest=swaddr_read(reg_l(R_EDI),DATA_BYTE);
+			dest=swaddr_read(reg_l(R_EDI),DATA_BYTE,R_ES);
 			if(cpu.DF) reg_l(R_EDI)-=DATA_BYTE;
 			else reg_l(R_EDI)+=DATA_BYTE;
 	}

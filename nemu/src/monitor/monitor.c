@@ -24,6 +24,11 @@ static void welcome() {
 			exec_file);
 }
 
+static void init_cr0() {
+	cpu.cr0.protect_enable=0;
+	cpu.cr0.paging=0;
+}
+
 void init_monitor(int argc, char *argv[]) {
 	/* Perform some global initialization */
 
@@ -88,6 +93,7 @@ void restart() {
 	/* Set the initial instruction pointer. */
 	cpu.eip = ENTRY_START;
 
+	init_cr0();
 	init_cache();
 
 	/* Initialize DRAM. */
