@@ -48,11 +48,11 @@ int main() {
 	int *p=&d;
 	(*p)++;
 	nemu_assert(d==11);
-/*
+
 	memset(buf,0xf,sizeof(buf));
 	buf[127]=0;
 	nemu_assert(strlen(buf)==127);
-
+/*
 	strcpy(buf,str);
 	nemu_assert(!strcmp(str,"mytest"));
 
