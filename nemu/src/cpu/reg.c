@@ -7,6 +7,7 @@ CPU_state cpu;
 const char *regsl[] = {"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi"};
 const char *regsw[] = {"ax", "cx", "dx", "bx", "sp", "bp", "si", "di"};
 const char *regsb[] = {"al", "cl", "dl", "bl", "ah", "ch", "dh", "bh"};
+const char *regss[] = {"es", "cs", "ss", "ds", "fs", "gs"};
 
 void reg_test() {
 	srand(time(0));
@@ -42,3 +43,22 @@ void reg_test() {
 	assert(eip_sample == cpu.eip);
 }
 
+void sreg_load(uint8_t sreg) {
+	SEG_DESCRIPTOR S;
+    Assert(cpu.cr0.protect_enable, "out of protection mode!");
+    uint32_t index = cpu.sr[sreg].selector >> 3;
+
+    Assert(index * 8 < cpu.gdtr.seg_limit, "segment selector out of limit!");
+    S._0 = lnaddr_read(cpu.gdtr.base_addr + index * 8, 4);
+  	S._4 = lnaddr_read(cpu.gdtr.base_addr + index * 8 + 4, 4);
+
+	Assert(S.P == 1, "segment error!");
+	cpu.sr[sreg].seg_base1 = S.BASE_15_0;
+	cpu.sr[sreg].seg_base2 = S.BASE_23_16;
+	cpu.sr[sreg].seg_base3 = S.BASE_31_24;
+	cpu.sr[sreg].seg_limit1 = S.LIMIT_15_0;
+	cpu.sr[sreg].seg_limit2 = S.LIMIT_19_16;
+	cpu.sr[sreg].seg_limit3 = 0xfff;
+
+    if (S.G) cpu.sr[sreg].seg_limit <<= 12;
+}

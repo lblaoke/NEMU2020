@@ -65,5 +65,34 @@ make_helper(mov_r2cr) {
 }
 #endif
 
+#if DATA_BYTE == 2
+make_helper(mov_seg) {
+	uint8_t opcode = instr_fetch(eip + 1, 1);
+	switch(opcode) {
+		case 0xd8:
+			cpu.ds.selector = reg_w(R_EAX);
+			sreg_load(R_DS);
+			print_asm("mov %%%s, ds", REG_NAME(R_EAX));
+			break;
+		case 0xc0:
+			cpu.es.selector = reg_w(R_EAX);
+			sreg_load(R_ES);
+			print_asm("mov %%%s, es", REG_NAME(R_EAX));
+			break;
+		break;
+		case 0xd0:
+			cpu.ss.selector = reg_w(R_EAX);
+			sreg_load(R_SS);
+			print_asm("mov %%%s, ss", REG_NAME(R_EAX));
+			break;
+		break;
+		default:
+		break;
+	}
+	return 2;
+}
+#endif 
+
+
 
 #include "cpu/exec/template-end.h"

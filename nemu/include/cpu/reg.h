@@ -36,6 +36,31 @@ struct SREG{
 };
 
 typedef struct {
+	union {
+		struct {
+			uint32_t LIMIT_15_0	:16;
+			uint32_t BASE_15_0	:16;
+		};
+		uint32_t _0;
+	};
+	union {
+		struct {
+			uint32_t BASE_23_16	:8;
+			uint32_t TYPE		:5;
+			uint32_t DPL		:2;
+			uint32_t P			:1;
+			uint32_t LIMIT_19_16:4;
+			uint32_t AVL		:1;
+			uint32_t			:1;
+			uint32_t B			:1;
+			uint32_t G			:1;
+			uint32_t BASE_31_24	:8;
+		};
+		uint32_t _4;
+	};
+}SEG_DESCRIPTOR;
+
+typedef struct {
 union {
 	union {
 		uint32_t _32;
@@ -103,6 +128,8 @@ static inline int check_reg_index(int index) {
 	assert(index >= 0 && index < 8);
 	return index;
 }
+
+void sreg_load(uint8_t);
 
 #define reg_l(index) (cpu.gpr[check_reg_index(index)]._32)
 #define reg_w(index) (cpu.gpr[check_reg_index(index)]._16)
