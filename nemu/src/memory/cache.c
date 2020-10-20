@@ -17,7 +17,7 @@ uint32_t cache1_read(Address addr) {
 	//find free cache
 	for(block=start;block<end && cache1[block].valid;block++);
 	if(block>=end) {
-		srand(0);
+		srand(block);
 		block=start+rand()%NR_IN1;
 	}
 
@@ -40,7 +40,7 @@ uint32_t cache2_read(Address addr) {
 
 	//if(block>=end) {
 	{
-		srand(0);
+		srand(block);
 		block=start+rand()%NR_IN2;
 		if(cache2[block].valid && cache2[block].dirty) {
 			printf("write back!\n");
@@ -77,13 +77,12 @@ void cache2_write(Address addr,size_t len,uint32_t buf) {
 	if(block>=end) block=cache2_read(addr);
 
 	cache2[block].dirty=true;
-	uint8_t temp[4];
-	memcpy(temp,&buf,4);
 
-	if(OFFSET+len<=NR_DATA) {
-		memcpy(cache2[block].data+OFFSET,temp,len);
-	} else {
-		printf("over!\n");
+	if(OFFSET+len<=NR_DATA) memcpy(cache2[block].data+OFFSET,&buf,len);
+	else {
+		uint8_t temp[4];
+		memcpy(temp,&buf,4);
+
 		memcpy(cache2[block].data+OFFSET,temp,NR_DATA-OFFSET);
 
 		addr.address+=(NR_DATA-OFFSET);
