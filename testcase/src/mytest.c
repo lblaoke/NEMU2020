@@ -30,7 +30,7 @@ int main() {
 		nemu_assert(!!a[i]==a[i]);
 		nemu_assert((a[i] && (b[i] || c[i]))==((a[i] && b[i]) || (a[i] && c[i])));
 	}
-/*
+
 	for(i=0;i<8;i++) {
 		nemu_assert(a[i]*(b[i]+c[i])==a[i]*b[i]+a[i]*c[i]);
 		nemu_assert(a[i]-b[i]==-(b[i]-a[i]));
@@ -38,7 +38,7 @@ int main() {
 		nemu_assert(a[i]/2==(a[i]>>1));
 		nemu_assert(a[i]-a[i]==0);
 	}
-
+/*
 	nemu_assert(2*(5-4)/1==2);
 	nemu_assert(100/3==33);
 
