@@ -12,7 +12,7 @@ uint32_t hwaddr_read(hwaddr_t addr,size_t len) {
 	uint8_t temp[4];
 	memset(temp,0,sizeof(temp));
 
-	if(OFFSET+len<NR_DATA) {
+	if(OFFSET+len<=NR_DATA) {
 		memcpy(temp,cache1[block1].data + OFFSET,len);
 	} else {
 		A.address+=(NR_DATA-OFFSET);
