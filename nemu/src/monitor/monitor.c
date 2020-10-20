@@ -29,6 +29,11 @@ static void init_cr0() {
 	cpu.cr0.paging=0;
 }
 
+static void init_seg() {
+	cpu.cs.seg_base=0;
+	cpu.cs.seg_limit=0xffffffff;
+}
+
 void init_monitor(int argc, char *argv[]) {
 	/* Perform some global initialization */
 
@@ -94,6 +99,7 @@ void restart() {
 	cpu.eip = ENTRY_START;
 
 	init_cr0();
+	init_seg();
 	init_cache();
 
 	/* Initialize DRAM. */
