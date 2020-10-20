@@ -15,9 +15,8 @@ uint32_t cache1_read(Address addr) {
 	for(block=start;block<end;block++) if(cache1[block].valid && cache1[block].tag==addr.tag1) return block;
 
 	//find free cache
-	//for(block=start;block<end && cache1[block].valid;block++);
-	//if(block>=end) {
-	{
+	for(block=start;block<end && cache1[block].valid;block++);
+	if(block>=end) {
 		srand(block);
 		block=start+rand()%NR_IN1;
 	}
