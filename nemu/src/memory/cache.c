@@ -17,7 +17,7 @@ uint32_t cache1_read(Address addr) {
 	//find free cache
 	for(block=start;block<end && cache1[block].valid;block++);
 	if(block>=end) {
-		srand(block);
+		//srand(block);
 		block=start+rand()%NR_IN1;
 	}
 
@@ -37,7 +37,7 @@ uint32_t cache2_read(Address addr) {
 	for(block=start;block<end && cache2[block].valid;block++);
 
 	if(block>=end) {
-		srand(block);
+		//srand(block);
 		block=start+rand()%NR_IN2;
 		if(cache2[block].dirty) {
 			printf("write back: %d,%d\n",block/NR_IN2,block%NR_IN2);
