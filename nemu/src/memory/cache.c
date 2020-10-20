@@ -36,8 +36,6 @@ uint32_t cache2_read(Address addr) {
 	//find free cache
 	//for(block=start;block<end && cache2[block].valid;block++);
 
-	uint32_t addr_s=addr.address-addr.offset;
-
 	//if(block>=end) {
 	{
 		srand(block);
@@ -46,15 +44,23 @@ uint32_t cache2_read(Address addr) {
 			printf("write back!\n");
 			uint8_t mask[BURST_LEN<<1];
 			memset(mask,1,BURST_LEN<<1);
-			for(i=0;i<NR_DATA;i+=BURST_LEN) ddr3_write(addr_s+i,cache2[block].data+i,mask);
+
+			Address B;
+			B.address=0;
+			B.tag2=cache2[block].tag;
+			B.group2=block;
+
+			for(i=0;i<NR_DATA;i+=BURST_LEN) ddr3_write(B.address+i,cache2[block].data+i,mask);
 			printf("success!\n");
 		}
 	}
 
+	addr.address-=addr.offset;
+
 	cache2[block].valid=true;
 	cache2[block].dirty=false;
 	cache2[block].tag=addr.tag2;
-	for(i=0;i<NR_DATA;i+=BURST_LEN) ddr3_read(addr_s+i,cache2[block].data+i);
+	for(i=0;i<NR_DATA;i+=BURST_LEN) ddr3_read(addr.address+i,cache2[block].data+i);
 
 	return block;
 }
