@@ -83,6 +83,7 @@ void cache2_write(Address addr,size_t len,uint32_t buf) {
 	if(OFFSET+len<=NR_DATA) {
 		memcpy(cache2[block].data+OFFSET,temp,len);
 	} else {
+		printf("over!\n");
 		memcpy(cache2[block].data+OFFSET,temp,NR_DATA-OFFSET);
 
 		addr.address+=(NR_DATA-OFFSET);
