@@ -34,11 +34,12 @@ uint32_t cache2_read(Address addr) {
 	for(block=start;block<end;block++) if(cache2[block].valid && cache2[block].tag==addr.tag2) return block;
 
 	//find free cache
-	for(block=start;block<end && cache2[block].valid;block++);
+	//for(block=start;block<end && cache2[block].valid;block++);
 
 	uint32_t addr_s=addr.address-addr.offset;
 
-	if(block>=end) {
+	//if(block>=end) {
+	{
 		srand(0);
 		block=start+rand()%NR_IN2;
 		if(cache2[block].dirty) {
@@ -78,7 +79,6 @@ void cache2_write(Address addr,size_t len,uint32_t buf) {
 	cache2[block].dirty=true;
 	uint8_t temp[4];
 	memcpy(temp,&buf,4);
-	//memcpy(cache2[block].data+OFFSET,temp,len);
 
 	if(OFFSET+len<=NR_DATA) {
 		memcpy(cache2[block].data+OFFSET,temp,len);
