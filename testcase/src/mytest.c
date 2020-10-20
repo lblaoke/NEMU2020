@@ -52,10 +52,10 @@ int main() {
 	memset(buf,0xf,sizeof(buf));
 	buf[127]=0;
 	nemu_assert(strlen(buf)==127);
-/*
+
 	strcpy(buf,str);
 	nemu_assert(!strcmp(str,"mytest"));
-
+/*
 	//sprintf(buf, "%x",F_div_F(int2F(4),int2F(2)));
 	//sprintf(buf, "%x",f2F(2.0));
 	nemu_assert(F_div_F(int2F(-6),int2F(-2))==0x30000);
