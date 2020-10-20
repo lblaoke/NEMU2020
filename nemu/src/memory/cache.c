@@ -85,7 +85,7 @@ void cache2_write(Address addr,size_t len,uint32_t buf) {
 	}
 
 	if(block>=end) block=cache2_read(addr);
-	printf("write: %d,%d\n",block/NR_IN2,block%NR_IN2);
+	//printf("write: %d,%d\n",block/NR_IN2,block%NR_IN2);
 
 	cache2[block].dirty=true;
 
