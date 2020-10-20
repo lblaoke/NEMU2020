@@ -1,6 +1,7 @@
 #include "nemu.h"
 #include <stdlib.h>
 #include <time.h>
+#include "../../../lib-common/x86-inc/mmu.h"
 
 CPU_state cpu;
 
@@ -44,7 +45,7 @@ void reg_test() {
 }
 
 void sreg_load(uint8_t sreg) {
-	SEG_DESCRIPTOR S;
+	SegDesc S;
     Assert(cpu.cr0.protect_enable, "out of protection mode!");
     uint32_t index = cpu.sr[sreg].selector >> 3;
 
@@ -52,13 +53,13 @@ void sreg_load(uint8_t sreg) {
     S._0 = lnaddr_read(cpu.gdtr.base_addr + index * 8, 4);
   	S._4 = lnaddr_read(cpu.gdtr.base_addr + index * 8 + 4, 4);
 
-	Assert(S.P == 1, "segment error!");
-	cpu.sr[sreg].seg_base1 = S.BASE_15_0;
-	cpu.sr[sreg].seg_base2 = S.BASE_23_16;
-	cpu.sr[sreg].seg_base3 = S.BASE_31_24;
-	cpu.sr[sreg].seg_limit1 = S.LIMIT_15_0;
-	cpu.sr[sreg].seg_limit2 = S.LIMIT_19_16;
+	Assert(S.present == 1, "segment error!");
+	cpu.sr[sreg].seg_base1 = S.base_15_0;
+	cpu.sr[sreg].seg_base2 = S.base_23_16;
+	cpu.sr[sreg].seg_base3 = S.base_31_24;
+	cpu.sr[sreg].seg_limit1 = S.limit_15_0;
+	cpu.sr[sreg].seg_limit2 = S.limit_19_16;
 	cpu.sr[sreg].seg_limit3 = 0xfff;
 
-    if (S.G) cpu.sr[sreg].seg_limit <<= 12;
+    if (S.granularity) cpu.sr[sreg].seg_limit <<= 12;
 }
