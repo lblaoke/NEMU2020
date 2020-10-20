@@ -47,7 +47,7 @@ uint32_t cache2_read(Address addr) {
 			uint8_t mask[BURST_LEN<<1];
 			memset(mask,1,BURST_LEN<<1);
 			for(i=0;i<NR_DATA;i+=BURST_LEN) ddr3_write(addr_s+i,cache2[block].data+i,mask);
-			printf("success\n");
+			printf("success!\n");
 		}
 	}
 
