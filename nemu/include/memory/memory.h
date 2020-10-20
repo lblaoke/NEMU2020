@@ -7,13 +7,13 @@
 
 #define DATA_WIDTH 6
 #define GROUP_WIDTH1 7
-#define GROUP_WIDTH2 2
+#define GROUP_WIDTH2 3
 #define IN_WIDTH1 3
 #define IN_WIDTH2 1
 
 #define NR_DATA 64
 #define NR_GROUP1 128
-#define NR_GROUP2 4
+#define NR_GROUP2 8
 #define NR_IN1 8
 #define NR_IN2 2
 
