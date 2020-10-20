@@ -40,7 +40,7 @@ uint32_t cache2_read(Address addr) {
 		srand(block);
 		block=start+rand()%NR_IN2;
 		if(cache2[block].dirty) {
-			printf("write back: %d,%d\n",block/2,block%2);
+			printf("write back: %d,%d\n",block/NR_IN2,block%NR_IN2);
 			uint8_t mask[BURST_LEN<<1];
 			memset(mask,1,BURST_LEN<<1);
 
@@ -85,7 +85,7 @@ void cache2_write(Address addr,size_t len,uint32_t buf) {
 	}
 
 	if(block>=end) block=cache2_read(addr);
-	printf("write: %d,%d\n",block/2,block%2);
+	printf("write: %d,%d\n",block/NR_IN2,block%NR_IN2);
 
 	cache2[block].dirty=true;
 
