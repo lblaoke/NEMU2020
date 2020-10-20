@@ -36,7 +36,7 @@ uint32_t cache2_read(Address addr) {
 	//find free cache
 	for(block=start;block<end && cache2[block].valid;block++);
 
-	addr.address-=addr.offset;
+	uint32_t addr_s=addr.address-addr.offset;
 
 	if(block>=end) {
 		srand(0);
@@ -45,8 +45,7 @@ uint32_t cache2_read(Address addr) {
 			printf("write back!\n");
 			uint8_t mask[BURST_LEN<<1];
 			memset(mask,1,BURST_LEN<<1);
-			cache2[block].dirty=false;
-			for(i=0;i<NR_DATA;i+=BURST_LEN) ddr3_write(addr.address+i,cache2[block].data+i,mask);
+			for(i=0;i<NR_DATA;i+=BURST_LEN) ddr3_write(addr_s+i,cache2[block].data+i,mask);
 			printf("success\n");
 		}
 	}
@@ -54,7 +53,7 @@ uint32_t cache2_read(Address addr) {
 	cache2[block].valid=true;
 	cache2[block].dirty=false;
 	cache2[block].tag=addr.tag2;
-	for(i=0;i<NR_DATA;i+=BURST_LEN) ddr3_read(addr.address+i,cache2[block].data+i);
+	for(i=0;i<NR_DATA;i+=BURST_LEN) ddr3_read(addr_s+i,cache2[block].data+i);
 
 	return block;
 }
@@ -71,21 +70,20 @@ void cache1_write(Address addr,size_t len,uint32_t buf) {
 	}
 }
 void cache2_write(Address addr,size_t len,uint32_t buf) {
-	uint32_t block,start=addr.group2*NR_IN2,end=(addr.group2+1)*NR_IN2;
+	uint32_t block,start=addr.group2*NR_IN2,end=(addr.group2+1)*NR_IN2,OFFSET=addr.offset;
 
-	for(block=start;block<end;block++) if(cache2[block].valid && cache2[block].tag==addr.tag2) {
-		cache2[block].dirty=true;
-		if(addr.offset+len<NR_DATA) memcpy(cache2[block].data+addr.offset,&buf,len);
-		else {
-			memcpy(cache2[block].data+addr.offset,&buf,NR_DATA-addr.offset);
-			Address B;
-			B.address=addr.address+len;
-			cache2_write(B,len-(NR_DATA-addr.offset),buf>>(NR_DATA-addr.offset));
-		}
-		return;
-	}
+	for(block=start;block<end;block++) if(cache2[block].valid && cache2[block].tag==addr.tag2) break;
+	if(block>=end) block=cache2_read(addr);
 
-	block=cache2_read(addr);
 	cache2[block].dirty=true;
-	memcpy(cache2[block].data+addr.offset,&buf,len);
+
+	if(OFFSET+len<NR_DATA) {
+		memcpy(cache2[block].data+OFFSET,&buf,len);
+	} else {
+		addr.address+=(NR_DATA-OFFSET);
+		uint32_t block2=cache2_read(addr);
+
+		memcpy(cache2[block].data+OFFSET,&buf,NR_DATA-OFFSET);
+		memcpy(cache2[block2].data,&buf+NR_DATA-OFFSET,len-(NR_DATA-OFFSET));
+	}
 }
