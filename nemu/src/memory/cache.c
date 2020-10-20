@@ -34,12 +34,12 @@ uint32_t cache2_read(Address addr) {
 	for(block=start;block<end;block++) if(cache2[block].valid && cache2[block].tag==addr.tag2) return block;
 
 	//find free cache
-	//for(block=start;block<end && cache2[block].valid;block++);
+	for(block=start;block<end && cache2[block].valid;block++);
 
-	//if(block>=end) {
-	{
+	if(block>=end) {
 		srand(block);
 		block=start+rand()%NR_IN2;
+/*
 		if(cache2[block].valid && cache2[block].dirty) {
 			printf("write back!\n");
 			uint8_t mask[BURST_LEN<<1];
@@ -53,6 +53,7 @@ uint32_t cache2_read(Address addr) {
 			for(i=0;i<NR_DATA;i+=BURST_LEN) ddr3_write(B.address+i,cache2[block].data+i,mask);
 			printf("success!\n");
 		}
+*/
 	}
 
 	addr.address-=addr.offset;
@@ -79,14 +80,19 @@ void cache1_write(Address addr,size_t len,uint32_t buf) {
 void cache2_write(Address addr,size_t len,uint32_t buf) {
 	uint32_t block,start=addr.group2*NR_IN2,end=(addr.group2+1)*NR_IN2,OFFSET=addr.offset;
 
-	for(block=start;block<end;block++) if(cache2[block].valid && cache2[block].tag==addr.tag2) break;
+	dram_write(addr.address,len,buf);
+
+	for(block=start;block<end;block++) if(cache2[block].valid && cache2[block].tag==addr.tag2) {
+		memcpy(cache2[block].data+OFFSET,&buf,len);
+		break;
+	}
+/*
 	if(block>=end) block=cache2_read(addr);
 
 	cache2[block].dirty=true;
 
 	if(OFFSET+len<=NR_DATA) memcpy(cache2[block].data+OFFSET,&buf,len);
 	else {
-		printf("overflow!\n");
 		uint8_t temp[4];
 		memcpy(temp,&buf,4);
 
@@ -97,5 +103,5 @@ void cache2_write(Address addr,size_t len,uint32_t buf) {
 
 		memcpy(cache2[block].data,temp+NR_DATA-OFFSET,len-(NR_DATA-OFFSET));
 	}
-
+*/
 }
