@@ -84,6 +84,7 @@ void cache2_write(Address addr,size_t len,uint32_t buf) {
 		uint32_t block2=cache2_read(addr);
 
 		memcpy(cache2[block].data+OFFSET,&buf,NR_DATA-OFFSET);
-		memcpy(cache2[block2].data,&buf+NR_DATA-OFFSET,len-(NR_DATA-OFFSET));
+		buf>>=(NR_DATA-OFFSET);
+		memcpy(cache2[block2].data,&buf,len-(NR_DATA-OFFSET));
 	}
 }
