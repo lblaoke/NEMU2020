@@ -40,7 +40,7 @@ uint32_t cache2_read(Address addr) {
 		srand(block);
 		block=start+rand()%NR_IN2;
 		if(cache2[block].dirty) {
-			printf("write back!\n");
+			printf("write back%d\n",block);
 			uint8_t mask[BURST_LEN<<1];
 			memset(mask,1,BURST_LEN<<1);
 
@@ -50,7 +50,6 @@ uint32_t cache2_read(Address addr) {
 			B.group2=block;
 
 			for(i=0;i<NR_DATA;i+=BURST_LEN) ddr3_write(B.address+i,cache2[block].data+i,mask);
-			printf("success!\n");
 		}
 	}
 
