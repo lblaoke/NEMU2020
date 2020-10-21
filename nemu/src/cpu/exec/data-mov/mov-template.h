@@ -39,10 +39,6 @@ make_helper(mov_cr2r) {
 		case 0xd8:
 			cpu.eax = cpu.cr3.val;
 			print_asm("mov %%cr3,%%%s", REG_NAME(R_EAX));
-			break;
-		default:
-			cpu.eax = cpu.cr0.val;
-			print_asm("mov %%cr0,%%%s", REG_NAME(R_EAX));
 	}
 	return 2;
 }
@@ -56,10 +52,6 @@ make_helper(mov_r2cr) {
 		case 0xd8:
 			cpu.cr3.val = cpu.eax;
 			print_asm("mov %%%s,%%cr3", REG_NAME(R_EAX));
-			break;
-		default:
-			cpu.cr0.val = cpu.eax;
-			print_asm("mov %%%s,%%cr0", REG_NAME(R_EAX));
 	}
 	return 2;
 }
@@ -80,15 +72,10 @@ make_helper(mov_seg) {
 			sreg_load(R_ES);
 			print_asm("mov %%%s, es", REG_NAME(R_EAX));
 			break;
-		break;
 		case 0xd0:
 			cpu.ss.selector = reg_w(R_EAX);
 			sreg_load(R_SS);
 			print_asm("mov %%%s, ss", REG_NAME(R_EAX));
-			break;
-		break;
-		default:
-		break;
 	}
 	return 2;
 }
