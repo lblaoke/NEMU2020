@@ -63,7 +63,7 @@ void cpu_exec(volatile uint32_t n) {
 		//printf("%ld\n",(long int)&cpu.eip);
 		//printf("1\n");
 		int instr_len = exec(cpu.eip);
-		//printf("0x%08x\n",cpu.eip);
+		printf("%d\n",cpu.eip);
 		//printf("%d\n",instr_len);
 		//printf("2\n");
 		//printf("%ld\n",(long int)&cpu.eip);
