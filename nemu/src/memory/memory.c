@@ -11,6 +11,28 @@ lnaddr_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg) {
 	return addr;	
 }
 
+hwaddr_t page_translate(lnaddr_t addr) {
+	if(cpu.cr0.paging && cpu.cr0.protect_enable) {
+		Address A;
+		A.address=addr;
+
+		PTE dir_1,page_1;
+		dir_1.val = hwaddr_read((cpu.cr3.page_directory_base<<12)+(A.DIR<<2),4);
+
+		Assert(dir_1.present, "page value = %x, eip = %x", dir_1.val,cpu.eip);
+		page_1.val = hwaddr_read((dir_1.page_frame<<12)+(A.PAGE<<2),4);
+
+		Assert(page_1.present, "page do not exist at %x", cpu.eip);
+		hwaddr_t hwaddr = (page_1.page_frame<<12)+A.OFFSET;
+
+		return hwaddr;
+	}
+
+	return addr;
+}
+
+
+
 /* Memory accessing interfaces */
 uint32_t hwaddr_read(hwaddr_t addr,size_t len) {
 	Address A;
@@ -40,14 +62,28 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t buf) {
 	cache1_write(A,len,buf);
 }
 
-
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
-	return hwaddr_read(addr, len);
+#ifdef DEBUG
+	assert(len == 1 || len == 2 || len == 4);
+#endif
+	size_t max_len = ((~addr) & 0xfff) + 1;
+    if (len > max_len) assert(0);
+
+	hwaddr_t hwaddr = page_translate(addr);
+	return hwaddr_read(hwaddr, len);
 }
 
 void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
-	hwaddr_write(addr, len, data);
+#ifdef DEBUG
+	assert(len == 1 || len == 2 || len == 4);
+#endif
+	size_t max_len = ((~addr) & 0xfff) + 1;
+    if (len > max_len) assert(0);
+
+	hwaddr_t hwaddr = page_translate(addr);
+	hwaddr_write(hwaddr, len, data);
 }
+
 
 uint32_t swaddr_read(swaddr_t addr, size_t len, uint8_t sreg) {
 #ifdef DEBUG

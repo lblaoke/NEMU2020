@@ -41,6 +41,11 @@ typedef union {
 		uint32_t group2	:GROUP_WIDTH2;
 		uint32_t tag2	:(32-GROUP_WIDTH2-DATA_WIDTH);
 	};
+	struct {
+		uint32_t OFFSET	:12;
+		uint32_t PAGE	:10;
+		uint32_t DIR	:10;
+	};
 } Address;
 
 typedef struct {
