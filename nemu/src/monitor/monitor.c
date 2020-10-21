@@ -24,6 +24,10 @@ static void welcome() {
 			exec_file);
 }
 
+static void inti_eflags() {
+	cpu.eflags=2;
+}
+
 static void init_cr0() {
 	cpu.cr0.protect_enable=0;
 	cpu.cr0.paging=0;
@@ -98,6 +102,7 @@ void restart() {
 	/* Set the initial instruction pointer. */
 	cpu.eip = ENTRY_START;
 
+	inti_eflags();
 	init_cr0();
 	init_seg();
 	init_cache();
