@@ -29,12 +29,12 @@ make_helper(ljmp) {
 	cpu.eip = op_first;
 	cpu.cs.selector = op_second;
 	//printf("1\n");
-	Assert(((cpu.cs.selector>>3)<<3) <= cpu.gdtr.seg_limit, "OUT LIMIT %d, %d", ((cpu.cs.selector>>3)<<3), cpu.gdtr.seg_limit);
+	Assert(((cpu.cs.selector>>3)<<3) <= cpu.gdtr.seg_limit, "segment deyond limit %d, %d", ((cpu.cs.selector>>3)<<3), cpu.gdtr.seg_limit);
 	//printf("2\n");
 	seg_des->first = instr_fetch(cpu.gdtr.base_addr + ((cpu.cs.selector>>3)<<3), 4);
 	//printf("3\n");
 	seg_des->second = instr_fetch(cpu.gdtr.base_addr + ((cpu.cs.selector>>3)<<3)+4, 4);
-	Assert(seg_des->present == 1, "segment ERROR");
+	Assert(seg_des->present == 1, "segment error!");
 	//printf("3\n");
 	cpu.cs.base_addr1 = seg_des->base_15_0;
 	cpu.cs.base_addr2 = seg_des->base_23_16;

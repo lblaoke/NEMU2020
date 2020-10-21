@@ -44,20 +44,22 @@ void reg_test() {
 
 void seg_do(uint8_t sreg) {
 	SegDesc seg_des;
-	Assert(cpu.cr0.protect_enable,"Not in PM");
+	Assert(cpu.cr0.protect_enable,"out of protection mode!");
 	uint32_t index = cpu.sr[sreg].selector >> 3;
-	Assert(index*8<cpu.gdtr.seg_limit,"OUT LIMIT");
+	
+	Assert(index*8<cpu.gdtr.seg_limit,"segment selector deyond limit!");
 	seg_des.first = lnaddr_read(cpu.gdtr.base_addr+index*8,4);
 	seg_des.second = lnaddr_read(cpu.gdtr.base_addr+index*8+4,4);
-	Assert(seg_des.present == 1, "segment error");
+
+	Assert(seg_des.present == 1, "segment error!");
 	cpu.sr[sreg].base_addr1 = seg_des.base_15_0;
 	cpu.sr[sreg].base_addr2 = seg_des.base_23_16;
 	cpu.sr[sreg].base_addr3 = seg_des.base_31_24;
 	cpu.sr[sreg].seg_limit1 = seg_des.limit_15_0;
 	cpu.sr[sreg].seg_limit2 = seg_des.limit_19_16;
 	cpu.sr[sreg].seg_limit3 = 0xfff;
+
     if (seg_des.granularity) cpu.sr[sreg].seg_limit <<= 12;
-	//printf("1\n");
 }
 
 
