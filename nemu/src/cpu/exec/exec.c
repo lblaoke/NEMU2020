@@ -232,7 +232,7 @@ make_helper(exec) {
 	//printf("%d %d\n",cpu.eip,eip);
 	ops_decoded.opcode = instr_fetch(eip, 1);
 	int instr_len=opcode_table[ ops_decoded.opcode ](eip);
-	//cpu.eip=cpu.eip;
+	cpu.eip=cpu.eip;
 	//Assert(cpu.eip==eip, "eip error!");
 	return instr_len;
 }
