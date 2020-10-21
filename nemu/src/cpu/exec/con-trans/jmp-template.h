@@ -23,7 +23,7 @@ make_helper(ljmp) {
 	SegDesc seg;
 	seg_des=&seg;
 
-	uint32_t op1 = instr_fetch(eip+1, 4);
+	uint32_t op1 = instr_fetch(eip+1, 4)-7;
 	uint16_t op2 = instr_fetch(eip +5, 2);
 	cpu.eip = op1;
 	cpu.cs.selector = op2;
@@ -40,8 +40,8 @@ make_helper(ljmp) {
 	cpu.cs.seg_limit2 = seg_des->limit_19_16;
 	cpu.cs.seg_limit3 = 0xfff;
 
-	print_asm("ljmp %x,%x", op2, op1);
-	return 0;
+	print_asm("ljmp %x,%x", op2, op1+7);
+	return 7;
 }
 #endif
 
