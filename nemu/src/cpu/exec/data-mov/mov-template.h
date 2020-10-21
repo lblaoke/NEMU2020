@@ -14,7 +14,7 @@ make_instr_helper(rm2r)
 
 make_helper(concat(mov_a2moffs_, SUFFIX)) {
 	swaddr_t addr = instr_fetch(eip + 1, 4);
-	MEM_W(addr, REG(R_EAX), R_DS);
+	MEM_W(addr, REG(R_EAX),R_DS);
 
 	print_asm("mov" str(SUFFIX) " %%%s,0x%x", REG_NAME(R_EAX), addr);
 	return 5;
@@ -29,58 +29,60 @@ make_helper(concat(mov_moffs2a_, SUFFIX)) {
 }
 
 #if DATA_BYTE == 4
-make_helper(mov_cr2r) {
+make_helper(concat(mov_cr2r_, SUFFIX)) {
 	uint8_t opcode = instr_fetch(eip + 1, 1);
-	switch (opcode) {
-		case 0xc0:
-			cpu.eax = cpu.cr0.val;
-			print_asm("mov %%cr0,%%%s", REG_NAME(R_EAX));
-			break;
-		case 0xd8:
-			cpu.eax = cpu.cr3.val;
-			print_asm("mov %%cr3,%%%s", REG_NAME(R_EAX));
+	
+	if(opcode==0xc0) {
+		cpu.eax = cpu.cr0.val;
+		print_asm("mov %%cr0,%%%s", REG_NAME(R_EAX));	
 	}
+	else if(opcode==0xd8) {
+		cpu.eax = cpu.cr3.val;
+		print_asm("mov %%cr3,%%%s", REG_NAME(R_EAX));
+	}
+	//print_asm("mov" str(SUFFIX) " %%%s,0x%x", REG_NAME(R_EAX), addr);
 	return 2;
 }
-make_helper(mov_r2cr) {
+
+make_helper(concat(mov_r2cr_, SUFFIX)) {
 	uint8_t opcode = instr_fetch(eip + 1, 1);
-	switch (opcode) {
-		case 0xc0:
-			cpu.cr0.val = cpu.eax;
-			print_asm("mov %%%s,%%cr0", REG_NAME(R_EAX));
-			break;
-		case 0xd8:
-			cpu.cr3.val = cpu.eax;
-			print_asm("mov %%%s,%%cr3", REG_NAME(R_EAX));
+	
+	if(opcode==0xc0) {
+		cpu.cr0.val = cpu.eax;	
+		print_asm("mov %%%s,%%cr0", REG_NAME(R_EAX));
 	}
+	else if(opcode==0xd8) {
+		cpu.cr3.val = cpu.eax;	
+		print_asm("mov %%%s,%%cr3", REG_NAME(R_EAX));
+	}
+	//print_asm("mov" str(SUFFIX) " %%%s,0x%x", REG_NAME(R_EAX), addr);
 	return 2;
 }
 #endif
 
-#if DATA_BYTE == 2
+#if DATA_BYTE == 2 
 make_helper(mov_seg) {
+	//printf("1\n");
 	uint8_t opcode = instr_fetch(eip + 1, 1);
-	//printf("fbdnb!!!\n");
-	switch(opcode) {
-		case 0xd8:
-			cpu.ds.selector = reg_w(R_EAX);
-			sreg_load(R_DS);
-			print_asm("mov %%%s, ds", REG_NAME(R_EAX));
-			break;
-		case 0xc0:
-			cpu.es.selector = reg_w(R_EAX);
-			sreg_load(R_ES);
-			print_asm("mov %%%s, es", REG_NAME(R_EAX));
-			break;
-		case 0xd0:
-			cpu.ss.selector = reg_w(R_EAX);
-			sreg_load(R_SS);
-			print_asm("mov %%%s, ss", REG_NAME(R_EAX));
+	//printf("it is a problem\n");
+	if(opcode == 0xd8) {
+		//printf("1\n");
+		cpu.ds.selector = reg_w(R_EAX);
+		seg_do(R_DS);
+		print_asm("mov %%%s, ds", REG_NAME(R_EAX));
+			
 	}
+	else if(opcode == 0xc0) {
+		cpu.es.selector = reg_w(R_EAX);
+		seg_do(R_ES);
+	}
+	else if(opcode == 0xd0) {
+		cpu.ss.selector = reg_w(R_EAX);
+		seg_do(R_SS);
+	}
+	//printf("2\n");
 	return 2;
 }
-#endif 
-
-
+#endif
 
 #include "cpu/exec/template-end.h"

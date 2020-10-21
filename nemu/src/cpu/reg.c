@@ -1,21 +1,19 @@
 #include "nemu.h"
 #include <stdlib.h>
 #include <time.h>
-#include "../../../lib-common/x86-inc/mmu.h"
 
 CPU_state cpu;
 
 const char *regsl[] = {"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi"};
 const char *regsw[] = {"ax", "cx", "dx", "bx", "sp", "bp", "si", "di"};
 const char *regsb[] = {"al", "cl", "dl", "bl", "ah", "ch", "dh", "bh"};
-const char *regss[] = {"es", "cs", "ss", "ds", "fs", "gs"};
 
 void reg_test() {
 	srand(time(0));
 	uint32_t sample[8];
 	uint32_t eip_sample = rand();
 	cpu.eip = eip_sample;
-
+	
 	int i;
 	for(i = R_EAX; i <= R_EDI; i ++) {
 		sample[i] = rand();
@@ -44,21 +42,22 @@ void reg_test() {
 	assert(eip_sample == cpu.eip);
 }
 
-void sreg_load(uint8_t sreg) {
-    Assert(cpu.cr0.protect_enable, "out of protection mode!");
-    uint32_t index = cpu.sr[sreg].selector >> 3;
-
-    Assert(index * 8 < cpu.gdtr.seg_limit, "segment selector out of limit!");
-    seg_des->_0 = lnaddr_read(cpu.gdtr.base_addr + index * 8, 4);
-  	seg_des->_4 = lnaddr_read(cpu.gdtr.base_addr + index * 8 + 4, 4);
-
-	Assert(seg_des->present == 1, "segment error!");
-	cpu.sr[sreg].seg_base1 = seg_des->base_15_0;
-	cpu.sr[sreg].seg_base2 = seg_des->base_23_16;
-	cpu.sr[sreg].seg_base3 = seg_des->base_31_24;
-	cpu.sr[sreg].seg_limit1 = seg_des->limit_15_0;
-	cpu.sr[sreg].seg_limit2 = seg_des->limit_19_16;
+void seg_do(uint8_t sreg) {
+	SEG_descriptor seg_des;
+	Assert(cpu.cr0.protect_enable,"Not in PM");
+	uint32_t index = cpu.sr[sreg].selector >> 3;
+	Assert(index*8<cpu.gdtr.seg_limit,"OUT LIMIT");
+	seg_des.first = lnaddr_read(cpu.gdtr.base_addr+index*8,4);
+	seg_des.second = lnaddr_read(cpu.gdtr.base_addr+index*8+4,4);
+	Assert(seg_des.p == 1, "segment error");
+	cpu.sr[sreg].base_addr1 = seg_des.base_addr1;
+	cpu.sr[sreg].base_addr2 = seg_des.base_addr2;
+	cpu.sr[sreg].base_addr3 = seg_des.base_addr3;
+	cpu.sr[sreg].seg_limit1 = seg_des.seg_limit1;
+	cpu.sr[sreg].seg_limit2 = seg_des.seg_limit2;
 	cpu.sr[sreg].seg_limit3 = 0xfff;
-
-    if (seg_des->granularity) cpu.sr[sreg].seg_limit <<= 12;
+    	if (seg_des.g) cpu.sr[sreg].seg_limit <<= 12;
+	//printf("1\n");
 }
+
+

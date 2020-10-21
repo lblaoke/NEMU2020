@@ -169,7 +169,7 @@ helper_fun _2byte_opcode_table [256] = {
 /* 0x14 */	inv, inv, inv, inv, 
 /* 0x18 */	inv, inv, inv, inv, 
 /* 0x1c */	inv, inv, inv, inv, 
-/* 0x20 */	mov_cr2r, inv, mov_r2cr, inv, 
+/* 0x20 */	mov_cr2r_l, inv, mov_r2cr_l, inv, 
 /* 0x24 */	inv, inv, inv, inv,
 /* 0x28 */	inv, inv, inv, inv, 
 /* 0x2c */	inv, inv, inv, inv, 
@@ -232,7 +232,7 @@ make_helper(exec) {
 	//printf("%d %d\n",cpu.eip,eip);
 	ops_decoded.opcode = instr_fetch(eip, 1);
 	int instr_len=opcode_table[ ops_decoded.opcode ](eip);
-	cpu.eip=cpu.eip;
+	//cpu.eip=cpu.eip;
 	//Assert(cpu.eip==eip, "eip error!");
 	return instr_len;
 }

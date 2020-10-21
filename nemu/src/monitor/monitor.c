@@ -34,7 +34,7 @@ static void init_cr0() {
 }
 
 static void init_seg() {
-	cpu.cs.seg_base=0;
+	cpu.cs.base_addr=0;
 	cpu.cs.seg_limit=0xffffffff;
 }
 
