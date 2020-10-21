@@ -60,14 +60,14 @@ void cpu_exec(volatile uint32_t n) {
 
 		/* Execute one instruction, including instruction fetch,
 		 * instruction decode, and the actual execution. */
-		printf("%ld\n",(long int)&cpu.eip);
-		printf("1\n");
+		//printf("%ld\n",(long int)&cpu.eip);
+		//printf("1\n");
 		int instr_len = exec(cpu.eip);
-		printf("%ld\n",(long int)&cpu.eip);
-		printf("2\n");
-		printf("%ld\n",(long int)&cpu.eip);
+		//printf("%ld\n",(long int)&cpu.eip);
+		//printf("2\n");
+		//printf("%ld\n",(long int)&cpu.eip);
 		cpu.eip += instr_len;
-		printf("3\n");
+		//printf("3\n");
 
 #ifdef DEBUG
 		print_bin_instr(eip_temp, instr_len);
