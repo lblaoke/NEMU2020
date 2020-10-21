@@ -27,8 +27,8 @@ uint32_t elf_value(char *s) {
 }
 
 void read_ebp (swaddr_t addr , PartOfStackFrame *ebp) {
-	ebp -> prev_ebp = swaddr_read (addr , 4);
-	ebp -> ret_addr = swaddr_read (addr + 4 , 4);
+	ebp -> prev_ebp = swaddr_read (addr , 4, R_SS);
+	ebp -> ret_addr = swaddr_read (addr + 4 , 4 ,R_SS);
 	int i;
 	for (i = 0;i < 4;i ++) ebp -> args [i] = swaddr_read (addr + 8 + 4 * i , 4);
 }
