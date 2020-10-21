@@ -24,7 +24,7 @@ make_helper(ljmp) {
 	extern SegDesc *seg_des;
 	SegDesc seg;
 	seg_des = &seg;
-	uint32_t op_first = instr_fetch(eip+1,4);
+	uint32_t op_first = instr_fetch(eip+1,4)-7;
 	uint16_t op_second = instr_fetch(eip+5,2);
 	cpu.eip = op_first;
 	cpu.cs.selector = op_second;
@@ -42,8 +42,8 @@ make_helper(ljmp) {
 	cpu.cs.seg_limit1 = seg_des->limit_15_0;
 	cpu.cs.seg_limit2 = seg_des->limit_19_16;
 	cpu.cs.seg_limit3 = 0xfff;
-	print_asm("ljmp %x,%x", op_second, op_first);
-	return 0;
+	print_asm("ljmp %x,%x", op_second, op_first+7);
+	return 7;
 }
 #endif
 #include "cpu/exec/template-end.h"

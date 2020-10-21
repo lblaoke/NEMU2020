@@ -92,32 +92,7 @@ typedef struct {
 	swaddr_t eip;
 
 } CPU_state;
-/*
-typedef struct {
-	union {
-		struct {
-			uint32_t seg_limit1	:16;
-			uint32_t base_addr1	:16;
-		};
-		uint32_t first;
-	};
-	union {
-		struct {
-			uint32_t base_addr2 	:8;
-			uint32_t type		:5;
-			uint32_t dpl		:2;
-			uint32_t p		:1;
-			uint32_t seg_limit2	:4;
-			uint32_t avl		:1;
-			uint32_t 		:1;
-			uint32_t b		:1;
-			uint32_t g		:1;
-			uint32_t base_addr3	:8;
-		};
-		uint32_t second;
-	};
-}SEG_descriptor;
-*/
+
 typedef union {
 	struct {
 		uint8_t p : 1;
