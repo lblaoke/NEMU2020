@@ -79,7 +79,7 @@ typedef struct SegmentDescriptor {
 			uint32_t limit_15_0          : 16;
 			uint32_t base_15_0           : 16;
 		};
-		uint32_t _0;
+		uint32_t first;
 	};
 	union {
 		struct {
@@ -95,7 +95,7 @@ typedef struct SegmentDescriptor {
 			uint32_t granularity         : 1;
 			uint32_t base_31_24          : 8;
 		};
-		uint32_t _4;
+		uint32_t second;
 	};
 } SegDesc;
 

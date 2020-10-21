@@ -1,4 +1,5 @@
 #include "cpu/exec/template-start.h"
+#include "../../../../../lib-common/x86-inc/mmu.h"
 
 #define instr jmp
 
@@ -20,8 +21,8 @@ make_instr_helper(rm);
 
 #if DATA_BYTE == 4
 make_helper(ljmp) {
-	extern SEG_descriptor *seg_des;
-	SEG_descriptor seg;
+	extern SegDesc *seg_des;
+	SegDesc seg;
 	seg_des = &seg;
 	uint32_t op_first = instr_fetch(eip+1,4);
 	uint16_t op_second = instr_fetch(eip+5,2);
@@ -33,13 +34,13 @@ make_helper(ljmp) {
 	seg_des->first = instr_fetch(cpu.gdtr.base_addr + ((cpu.cs.selector>>3)<<3), 4);
 	//printf("3\n");
 	seg_des->second = instr_fetch(cpu.gdtr.base_addr + ((cpu.cs.selector>>3)<<3)+4, 4);
-	Assert(seg_des->p == 1, "segment ERROR");
+	Assert(seg_des->present == 1, "segment ERROR");
 	//printf("3\n");
-	cpu.cs.base_addr1 = seg_des->base_addr1;
-	cpu.cs.base_addr2 = seg_des->base_addr2;
-	cpu.cs.base_addr3 = seg_des->base_addr3;
-	cpu.cs.seg_limit1 = seg_des->seg_limit1;
-	cpu.cs.seg_limit2 = seg_des->seg_limit2;
+	cpu.cs.base_addr1 = seg_des->base_15_0;
+	cpu.cs.base_addr2 = seg_des->base_23_16;
+	cpu.cs.base_addr3 = seg_des->base_31_24;
+	cpu.cs.seg_limit1 = seg_des->limit_15_0;
+	cpu.cs.seg_limit2 = seg_des->limit_19_16;
 	cpu.cs.seg_limit3 = 0xfff;
 	print_asm("ljmp %x,%x", op_second, op_first);
 	return 0;
