@@ -63,7 +63,7 @@ void cpu_exec(volatile uint32_t n) {
 		//printf("%ld\n",(long int)&cpu.eip);
 		//printf("1\n");
 		int instr_len = exec(cpu.eip);
-		printf("%d\n",cpu.eip);
+		//printf("%d\n",cpu.eip);
 		//printf("%d\n",instr_len);
 		//printf("2\n");
 		//printf("%ld\n",(long int)&cpu.eip);
@@ -74,7 +74,7 @@ void cpu_exec(volatile uint32_t n) {
 #ifdef DEBUG
 		print_bin_instr(eip_temp, instr_len);
 		strcat(asm_buf, assembly);
-		//Log_write("%s\n", asm_buf);
+		Log_write("%s\n", asm_buf);
 		if(n_temp < MAX_INSTR_TO_PRINT) {
 			printf("%s\n", asm_buf);
 		}
