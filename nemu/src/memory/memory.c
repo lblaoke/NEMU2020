@@ -22,10 +22,15 @@ hwaddr_t page_translate(lnaddr_t addr) {
 		if(B.address!=-1) return (B.address<<12)+A.OFFSET;
 
 		PTE dir_1,page_1;
-		dir_1.val = hwaddr_read((cpu.cr3.page_directory_base<<12)+(A.DIR<<2),4);
+
+		B.tag=cpu.cr3.page_directory_base;
+		B.OFFSET=(A.DIR<<2);
+		dir_1.val = hwaddr_read(B.address,4);
 
 		Assert(dir_1.present, "page value = %x, eip = %x", dir_1.val,cpu.eip);
-		page_1.val = hwaddr_read((dir_1.page_frame<<12)+(A.PAGE<<2),4);
+		B.tag=dir_1.page_frame;
+		B.OFFSET=(A.PAGE<<2);
+		page_1.val = hwaddr_read(B.address,4);
 
 		Assert(page_1.present, "page do not exist at %x", cpu.eip);
 		A.tag=page_1.page_frame;
