@@ -94,7 +94,7 @@ void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
 */
 	hwaddr_t hwaddr = page_translate(addr);
 	printf("0x%08x -> 0x%08x\n",addr,hwaddr);
-	assert(0);
+	Assert(addr==hwaddr,"lala");
 	hwaddr_write(hwaddr, len, data);
 }
 
