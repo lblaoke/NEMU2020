@@ -58,18 +58,18 @@ typedef struct {
 	bool valid;
 	uint32_t tag;
 	uint8_t data[NR_DATA];	
-}Cache1;
+} Cache1;
 typedef struct {
 	bool valid,dirty;
 	uint32_t tag;
 	uint8_t data[NR_DATA];	
-}Cache2;
+} Cache2;
 
 typedef struct {
 	bool valid;
 	uint32_t tag;
 	uint32_t page;
-}TLB;
+} TLB;
 
 Cache1 cache1[NR_GROUP1*NR_IN1];
 Cache2 cache2[NR_GROUP2*NR_IN2];

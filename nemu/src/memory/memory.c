@@ -8,7 +8,7 @@ lnaddr_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg) {
 		Assert(addr+len < cpu.sr[sreg].seg_limit, "CS segment beyond limit!");
 		return cpu.sr[sreg].base_addr + addr;
 	}
-	return addr;	
+	return addr;
 }
 
 hwaddr_t page_translate(lnaddr_t addr) {
@@ -20,6 +20,7 @@ hwaddr_t page_translate(lnaddr_t addr) {
 
 		B.address=tlb_read(A.tag);
 		if(B.address!=-1) {
+			printf("hit!\n");
 			B.tag=B.address;
 			B.OFFSET=A.OFFSET;
 			return B.address;
