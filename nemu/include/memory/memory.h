@@ -49,7 +49,7 @@ typedef union {
 		uint32_t DIR	:10;
 	};
 	struct {
-		uint32_t		:12;
+		uint32_t OFFSET	:12;
 		uint32_t tag	:20;
 	};
 } Address;

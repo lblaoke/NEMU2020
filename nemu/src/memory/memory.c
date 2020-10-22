@@ -15,8 +15,11 @@ hwaddr_t page_translate(lnaddr_t addr) {
 	if(cpu.cr0.paging && cpu.cr0.protect_enable) {
 		//printf("0x%08x\n",addr);
 		//Assert(0,"0x%08x",addr);
-		Address A;
+		Address A,B;
 		A.address=addr;
+
+		B.address=tlb_read(A.tag);
+		if(B.address!=-1) return (B.address<<12)+A.OFFSET;
 
 		PTE dir_1,page_1;
 		dir_1.val = hwaddr_read((cpu.cr3.page_directory_base<<12)+(A.DIR<<2),4);
@@ -27,6 +30,7 @@ hwaddr_t page_translate(lnaddr_t addr) {
 		Assert(page_1.present, "page do not exist at %x", cpu.eip);
 		A.tag=page_1.page_frame;
 
+		tlb_write(A.tag,page_1.page_frame);
 		return A.address;
 	}
 
