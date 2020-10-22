@@ -32,19 +32,19 @@ void init_page(void) {
 	/* We use inline assembly here to fill PTEs for efficiency.
 	 * If you do not understand it, refer to the C code below.
 	 */
-/*
+
 	asm volatile ("std;\
 	 1: stosl;\
 		subl %0, %%eax;\
 		jge 1b;\
 		cld" : :
 		"i"(PAGE_SIZE), "a"((PHY_MEM - PAGE_SIZE) | 0x7), "D"(ptable - 1));
-*/
+
 
 	/*
 		===== referenced code for the inline assembly above =====
-*/
-		uint32_t pframe_addr = (PHY_MEM - PAGE_SIZE) | 0x7;
+
+		uint32_t pframe_addr = PHY_MEM - PAGE_SIZE;
 		ptable --;
 
 		// fill PTEs reversely
@@ -52,7 +52,7 @@ void init_page(void) {
 			ptable->val = make_pte(pframe_addr);
 			ptable --;
 		}
-/*	*/
+	*/
 
 
 	/* make CR3 to be the entry of page directory */
