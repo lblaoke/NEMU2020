@@ -4,35 +4,23 @@
 #include <stdlib.h>
 
 void init_cache() {
-	uint32_t block;
+	uint32_t block,i;
 	for(block=0;block<NR_GROUP1*NR_IN1;block++) cache1[block].valid=false;
 	for(block=0;block<NR_GROUP2*NR_IN2;block++) cache2[block].valid=false;
+	
+	for(i=0;i<NR_GROUP1;i++) cache1_index[i]=i*NR_IN1;
+	for(i=0;i<NR_GROUP2;i++) cache2_index[i]=i*NR_IN2;
 }
 
 uint32_t cache1_read(Address addr) {
 	uint32_t block,start=addr.group1*NR_IN1,end=(addr.group1+1)*NR_IN1;
 
-	for(block=start;block<end;block++) if(cache1[block].valid && cache1[block].tag==addr.tag1) return block;
+	for(block=start;block<cache1_index[addr.group1];block++) if(cache1[block].valid && cache1[block].tag==addr.tag1) return block;
 
 	//find free cache
-	int left=start,right=end-1,middle;
-	while(left<=right) {
-		if(!cache1[left].valid) {
-			block=left;
-			break;
-		}
-		if(cache1[right].valid) {
-			block=end;
-			break;
-		}
-		middle=(left+right)>>1;
-		if(cache1[middle].valid) left=middle+1;
-		else right=middle;
-	}
-	if(block==end) {
-		//srand(block);
-		block=start+rand()%NR_IN1;
-	}
+	block=cache1_index[addr.group1];
+	if(block>=end) block=start+rand()%NR_IN1;
+	else cache1_index[addr.group1]++;
 
 	uint32_t block2=cache2_read(addr);
 	cache1[block].valid=true;
@@ -44,25 +32,12 @@ uint32_t cache1_read(Address addr) {
 uint32_t cache2_read(Address addr) {
 	uint32_t i,block,start=addr.group2*NR_IN2,end=(addr.group2+1)*NR_IN2;
 
-	for(block=start;block<end;block++) if(cache2[block].valid && cache2[block].tag==addr.tag2) return block;
+	for(block=start;block<cache2_index[addr.group2];block++) if(cache2[block].valid && cache2[block].tag==addr.tag2) return block;
 
 	//find free cache
-	int left=start,right=end-1,middle;
-	while(left<=right) {
-		if(!cache2[left].valid) {
-			block=left;
-			break;
-		}
-		if(cache2[right].valid) {
-			block=end;
-			break;
-		}
-		middle=(left+right)>>1;
-		if(cache2[middle].valid) left=middle+1;
-		else right=middle;
-	}
+	block=cache2_index[addr.group2];
 
-	if(block==end) {
+	if(block>=end) {
 		//srand(block);
 		block=start+rand()%NR_IN2;
 		if(cache2[block].valid && cache2[block].dirty) {
@@ -77,7 +52,7 @@ uint32_t cache2_read(Address addr) {
 
 			for(i=0;i<NR_DATA;i+=BURST_LEN) ddr3_write(B.address+i,cache2[block].data+i,mask);
 		}
-	}
+	} else cache2_index[addr.group2]++;
 
 	addr.address-=addr.offset;
 
@@ -90,11 +65,11 @@ uint32_t cache2_read(Address addr) {
 }
 
 void cache1_write(Address addr,size_t len,uint32_t buf) {
-	uint32_t block,start=addr.group1*NR_IN1,end=(addr.group1+1)*NR_IN1;
+	uint32_t block,start=addr.group1*NR_IN1;
 
 	cache2_write(addr,len,buf);
 
-	for(block=start;block<end;block++) if(cache1[block].valid && cache1[block].tag==addr.tag1) {
+	for(block=start;block<cache1_index[addr.group1];block++) if(cache1[block].valid && cache1[block].tag==addr.tag1) {
 		uint32_t block2=cache2_read(addr);
 		memcpy(cache1[block].data,cache2[block2].data,NR_DATA);
 		break;
@@ -105,7 +80,7 @@ void cache2_write(Address addr,size_t len,uint32_t buf) {
 
 	//dram_write(addr.address,len,buf);
 
-	for(block=start;block<end;block++) if(cache2[block].valid && cache2[block].tag==addr.tag2) {
+	for(block=start;block<cache2_index[addr.group2];block++) if(cache2[block].valid && cache2[block].tag==addr.tag2) {
 		//memcpy(cache2[block].data+OFFSET,&buf,len);
 		break;
 	}
