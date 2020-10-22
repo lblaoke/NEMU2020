@@ -15,8 +15,21 @@ uint32_t cache1_read(Address addr) {
 	for(block=start;block<end;block++) if(cache1[block].valid && cache1[block].tag==addr.tag1) return block;
 
 	//find free cache
-	for(block=start;block<end && cache1[block].valid;block++);
-	if(block>=end) {
+	int left=start,right=end-1,middle;
+	while(left<=right) {
+		if(!cache1[left].valid) {
+			block=left;
+			break;
+		}
+		if(cache1[right].valid) {
+			block=end;
+			break;
+		}
+		middle=(left+right)>>1;
+		if(cache1[middle].valid) left=middle+1;
+		else right=middle;
+	}
+	if(block==end) {
 		//srand(block);
 		block=start+rand()%NR_IN1;
 	}
@@ -34,9 +47,22 @@ uint32_t cache2_read(Address addr) {
 	for(block=start;block<end;block++) if(cache2[block].valid && cache2[block].tag==addr.tag2) return block;
 
 	//find free cache
-	for(block=start;block<end && cache2[block].valid;block++);
+	int left=start,right=end-1,middle;
+	while(left<=right) {
+		if(!cache2[left].valid) {
+			block=left;
+			break;
+		}
+		if(cache2[right].valid) {
+			block=end;
+			break;
+		}
+		middle=(left+right)>>1;
+		if(cache2[middle].valid) left=middle+1;
+		else right=middle;
+	}
 
-	if(block>=end) {
+	if(block==end) {
 		//srand(block);
 		block=start+rand()%NR_IN2;
 		if(cache2[block].valid && cache2[block].dirty) {
