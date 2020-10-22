@@ -19,7 +19,11 @@ hwaddr_t page_translate(lnaddr_t addr) {
 		A.address=addr;
 
 		B.address=tlb_read(A.tag);
-		if(B.address!=-1) return (B.address<<12)+A.OFFSET;
+		if(B.address!=-1) {
+			B.tag=B.address;
+			B.OFFSET=A.OFFSET;
+			return B.address;
+		}
 
 		PTE dir_1,page_1;
 
