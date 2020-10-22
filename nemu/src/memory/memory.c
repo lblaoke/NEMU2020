@@ -17,13 +17,13 @@ hwaddr_t page_translate(lnaddr_t addr) {
 		//Assert(0,"0x%08x",addr);
 		Address A,B;
 		A.address=addr;
-/*
+
 		B.address=tlb_read(A.tag);
 		if(B.address!=-1) {
 			A.tag=B.address;
 			return A.address;
 		}
-*/
+
 		PTE dir_1,page_1;
 
 		B.tag=cpu.cr3.page_directory_base;
@@ -38,7 +38,7 @@ hwaddr_t page_translate(lnaddr_t addr) {
 		Assert(page_1.present, "page do not exist at %x", cpu.eip);
 		A.tag=page_1.page_frame;
 
-		//tlb_write(A.tag,page_1.page_frame);
+		tlb_write(A.tag,page_1.page_frame);
 		return A.address;
 	}
 
