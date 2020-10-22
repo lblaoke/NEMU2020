@@ -31,13 +31,6 @@ extern uint8_t *hw_mem;
 	hwa_to_va(addr); \
 })
 
-#define find_invalid(name) int contact(find_invalid_,name)(name *array,int left,int right) { \
-		if(!array[left].valid) return left; \
-		if(array[right].valid) return right+1; \
-		int middle=(left+right)>>1; \
-		return array[middle].valid?contact(find_invalid_,name)(array,middle+1,right):contact(find_invalid_,name)(array,left,middle-1); \
-	}
-
 typedef union {
 	uint32_t address;
 	struct {

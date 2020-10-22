@@ -14,10 +14,23 @@ uint32_t tlb_read(uint32_t TAG) {
 	return -1;
 }
 void tlb_write(uint32_t TAG,uint32_t PAGE) {
-	int block;
-	for(block=0;block<NR_TLB && tlb[block].valid;block++);
+	int block=0,left=0,right=NR_TLB-1,middle;
+	//for(block=0;block<NR_TLB && tlb[block].valid;block++);
+	while(left<=right) {
+		if(!tlb[left].valid) {
+			block=left;
+			break;
+		}
+		if(tlb[right].valid) {
+			block=-1;
+			break;
+		}
+		middle=(left+right)>>1;
+		if(tlb[middle].valid) left=middle+1;
+		else right=middle;
+	}
 
-	if(block>=NR_TLB) block=rand()%NR_TLB;
+	if(block==-1) block=rand()%NR_TLB;
 
 	tlb[block].valid=true;
 	tlb[block].tag=TAG;
