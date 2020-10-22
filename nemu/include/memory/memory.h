@@ -17,6 +17,8 @@
 #define NR_IN1 8
 #define NR_IN2 16
 
+#define NR_TLB 64
+
 extern uint8_t *hw_mem;
 
 /* convert the hardware address in the test program to virtual address in NEMU */
@@ -46,6 +48,10 @@ typedef union {
 		uint32_t PAGE	:10;
 		uint32_t DIR	:10;
 	};
+	struct {
+		uint32_t page	:12;
+		uint32_t tag	:20;
+	};
 } Address;
 
 typedef struct {
@@ -59,16 +65,28 @@ typedef struct {
 	uint8_t data[NR_DATA];	
 }Cache2;
 
+typedef struct {
+	bool valid;
+	uint32_t tag;
+	uint32_t page;
+}TLB;
+
 Cache1 cache1[NR_GROUP1*NR_IN1];
 Cache2 cache2[NR_GROUP2*NR_IN2];
 
+TLB tlb[NR_TLB];
+
 hwaddr_t page_translate(lnaddr_t);
 
-void cache_init();
+void init_cache();
 uint32_t cache1_read(Address);
 uint32_t cache2_read(Address);
 void cache1_write(Address,size_t,uint32_t);
 void cache2_write(Address,size_t,uint32_t);
+
+void init_tlb();
+uint32_t tlb_read(uint32_t);
+void tlb_write(uint32_t,uint32_t);
 
 void ddr3_read(hwaddr_t, void *);
 uint32_t dram_read(hwaddr_t, size_t);

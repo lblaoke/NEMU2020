@@ -105,6 +105,7 @@ void restart() {
 	inti_eflags();
 	init_cr0();
 	init_seg();
+	init_tlb();
 	init_cache();
 
 	/* Initialize DRAM. */
