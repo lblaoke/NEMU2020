@@ -62,6 +62,8 @@ typedef struct {
 Cache1 cache1[NR_GROUP1*NR_IN1];
 Cache2 cache2[NR_GROUP2*NR_IN2];
 
+hwaddr_t page_translate(lnaddr_t);
+
 void cache_init();
 uint32_t cache1_read(Address);
 uint32_t cache2_read(Address);

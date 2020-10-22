@@ -135,6 +135,18 @@ static int cmd_bt(char *args) {
 
 static int cmd_cache(char *args) {return 0;}
 
+static int cmd_page(char *args) {
+	if(!args) return 0;
+
+	lnaddr_t lnaddr;
+	sscanf(args,"%x",&lnaddr);
+	hwaddr_t hwaddr = page_translate(lnaddr);
+
+	if(cpu.cr0.protect_enable && cpu.cr0.paging) printf("0x%x -> 0x%x",lnaddr,hwaddr);
+	else printf("\033[1;33mPage address convertion is invalid.\n\033[0m");
+	return 0;
+}
+
 static struct {
 	char *name;
 	char *description;
@@ -151,7 +163,8 @@ static struct {
 	{ "w", "Stop the execution of the program if the result of the expression has changed.", cmd_w},
 	{ "d", "Delete the Nth watchpoint", cmd_d},
 	{ "bt", "Print stack frame chain", cmd_bt},
-	{ "cache", "Print cache block infomation", cmd_cache}
+	{ "cache", "Print cache block infomation", cmd_cache},
+	{ "page", "Convert linear address to physical one", cmd_page}
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
