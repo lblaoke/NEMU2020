@@ -15,7 +15,7 @@ void init_cache() {
 uint32_t cache1_read(Address addr) {
 	uint32_t block,start=addr.group1*NR_IN1,end=(addr.group1+1)*NR_IN1;
 
-	for(block=start;block<cache1_index[addr.group1];block++) if(cache1[block].valid && cache1[block].tag==addr.tag1) return block;
+	for(block=start;block<cache1_index[addr.group1];block++) if(cache1[block].tag==addr.tag1) return block;
 
 	//find free cache
 	block=cache1_index[addr.group1];
@@ -32,15 +32,14 @@ uint32_t cache1_read(Address addr) {
 uint32_t cache2_read(Address addr) {
 	uint32_t i,block,start=addr.group2*NR_IN2,end=(addr.group2+1)*NR_IN2;
 
-	for(block=start;block<cache2_index[addr.group2];block++) if(cache2[block].valid && cache2[block].tag==addr.tag2) return block;
+	for(block=start;block<cache2_index[addr.group2];block++) if(cache2[block].tag==addr.tag2) return block;
 
 	//find free cache
 	block=cache2_index[addr.group2];
-
 	if(block>=end) {
 		//srand(block);
 		block=start+rand()%NR_IN2;
-		if(cache2[block].valid && cache2[block].dirty) {
+		if(cache2[block].dirty) {
 			//printf("write back: %d,%d\n",block/NR_IN2,block%NR_IN2);
 			uint8_t mask[BURST_LEN<<1];
 			memset(mask,1,BURST_LEN<<1);
@@ -69,23 +68,23 @@ void cache1_write(Address addr,size_t len,uint32_t buf) {
 
 	cache2_write(addr,len,buf);
 
-	for(block=start;block<cache1_index[addr.group1];block++) if(cache1[block].valid && cache1[block].tag==addr.tag1) {
+	for(block=start;block<cache1_index[addr.group1];block++) if(cache1[block].tag==addr.tag1) {
 		uint32_t block2=cache2_read(addr);
 		memcpy(cache1[block].data,cache2[block2].data,NR_DATA);
 		break;
 	}
 }
 void cache2_write(Address addr,size_t len,uint32_t buf) {
-	uint32_t block,start=addr.group2*NR_IN2,end=(addr.group2+1)*NR_IN2,OFFSET=addr.offset;
+	uint32_t block,start=addr.group2*NR_IN2,OFFSET=addr.offset;
 
 	//dram_write(addr.address,len,buf);
 
-	for(block=start;block<cache2_index[addr.group2];block++) if(cache2[block].valid && cache2[block].tag==addr.tag2) {
+	for(block=start;block<cache2_index[addr.group2];block++) if(cache2[block].tag==addr.tag2) {
 		//memcpy(cache2[block].data+OFFSET,&buf,len);
 		break;
 	}
 
-	if(block>=end) block=cache2_read(addr);
+	if(block>=cache2_index[addr.group2]) block=cache2_read(addr);
 	//rintf("write: %d,%d\n",block/NR_IN2,block%NR_IN2);
 
 	cache2[block].dirty=true;

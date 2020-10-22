@@ -11,7 +11,7 @@ void init_tlb() {
 
 uint32_t tlb_read(uint32_t TAG) {
 	int block;
-	for(block=0;block<tlb_index;block++) if(tlb[block].valid && tlb[block].tag==TAG) return tlb[block].page;
+	for(block=0;block<tlb_index;block++) if(tlb[block].tag==TAG) return tlb[block].page;
 	return -1;
 }
 void tlb_write(uint32_t TAG,uint32_t PAGE) {
