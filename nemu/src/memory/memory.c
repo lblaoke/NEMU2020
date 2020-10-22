@@ -14,7 +14,7 @@ lnaddr_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg) {
 hwaddr_t page_translate(lnaddr_t addr) {
 	if(cpu.cr0.paging && cpu.cr0.protect_enable) {
 		//printf("0x%08x\n",addr);
-		Assert(0,"0x%08x",addr);
+		//Assert(0,"0x%08x",addr);
 		Address A;
 		A.address=addr;
 
