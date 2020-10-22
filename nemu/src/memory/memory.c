@@ -20,10 +20,8 @@ hwaddr_t page_translate(lnaddr_t addr) {
 
 		B.address=tlb_read(A.tag);
 		if(B.address!=-1) {
-			printf("hit!\n");
-			B.tag=B.address;
-			B.OFFSET=A.OFFSET;
-			return B.address;
+			A.tag=B.address;
+			return A.address;
 		}
 
 		PTE dir_1,page_1;
