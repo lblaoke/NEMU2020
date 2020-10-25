@@ -10,8 +10,6 @@ void init_cache() {
 	
 	for(i=0;i<NR_GROUP1;i++) cache1_index[i]=i*NR_IN1;
 	for(i=0;i<NR_GROUP2;i++) cache2_index[i]=i*NR_IN2;
-
-	memset(cache2_mask,1,BURST_LEN<<1);
 }
 
 uint32_t cache1_read(Address addr) {
@@ -43,13 +41,15 @@ uint32_t cache2_read(Address addr) {
 		block=start+rand()%NR_IN2;
 		if(cache2[block].dirty) {
 			//printf("write back: %d,%d\n",block/NR_IN2,block%NR_IN2);
+			uint8_t mask[BURST_LEN<<1];
+			memset(mask,1,BURST_LEN<<1);
 
 			Address B;
 			B.address=0;
 			B.tag2=cache2[block].tag;
 			B.group2=block/NR_IN2;
 
-			for(i=0;i<NR_DATA;i+=BURST_LEN) ddr3_write(B.address+i,cache2[block].data+i,cache2_mask);
+			for(i=0;i<NR_DATA;i+=BURST_LEN) ddr3_write(B.address+i,cache2[block].data+i,mask);
 		}
 	} else cache2_index[addr.group2]++;
 
