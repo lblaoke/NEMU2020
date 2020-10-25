@@ -75,6 +75,7 @@ Cache2 cache2[NR_GROUP2*NR_IN2];
 TLB tlb[NR_TLB];
 
 int cache1_index[NR_GROUP1],cache2_index[NR_GROUP2],tlb_index,tlb_rand_index;
+uint8_t cache2_mask[16];
 
 hwaddr_t page_translate(lnaddr_t);
 
