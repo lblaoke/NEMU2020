@@ -87,7 +87,12 @@ typedef struct {
 	struct GDTR {
 		uint32_t base_addr;
 		uint16_t seg_limit;	
-	}gdtr;	
+	}gdtr;
+
+	struct IDTR{
+		uint32_t base_addr;
+		uint16_t seg_limit;
+	}idtr;	
 	
 	swaddr_t eip;
 

@@ -8,6 +8,9 @@
 #include "data-mov/movext.h"
 #include "data-mov/cltd.h"
 #include "data-mov/lgdt.h"
+#include "data-mov/lidt.h"
+#include "data-mov/pusha.h"
+#include "data-mov/popa.h"
 
 #include "arith/dec.h"
 #include "arith/inc.h"
@@ -61,3 +64,7 @@
 #include "con-trans/jns.h"
 #include "con-trans/jge.h"
 #include "con-trans/ja.h"
+
+#include "intr/int.h"
+#include "intr/iret.h"
+#include "intr/cli.h"
