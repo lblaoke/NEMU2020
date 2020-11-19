@@ -16,8 +16,7 @@ static int handle_count = 0;
 
 void do_syscall(TrapFrame *);
 
-void
-add_irq_handle(int irq, void (*func)(void) ) {
+void add_irq_handle(int irq, void (*func)(void) ) {
 	assert(irq < NR_HARD_INTR);
 	assert(handle_count <= NR_IRQ_HANDLE);
 
@@ -33,7 +32,7 @@ void irq_handle(TrapFrame *tf) {
 	 * to match the trap frame built during `do_irq.S'. Remove the
 	 * following line after you are done.
 	 */
-	panic("Have you re-organized the `TrapFrame' structure?");
+	//panic("Have you re-organized the `TrapFrame' structure?");
 
 	int irq = tf->irq;
 
