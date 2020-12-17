@@ -15,7 +15,7 @@ static void sys_ioctl(TrapFrame *tf) {
 }
 
 static void sys_write(TrapFrame *tf) {
-	
+	panic("Not Implemented!");
 }
 
 void do_syscall(TrapFrame *tf) {
