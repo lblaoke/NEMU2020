@@ -15,7 +15,7 @@ static void sys_ioctl(TrapFrame *tf) {
 }
 
 static void sys_write(TrapFrame *tf) {
-	uint32_t fd,len = tf->ebx,tf->edx;
+	uint32_t fd = tf->ebx,len = tf->edx;
 	char* buf = (char*)tf->ecx;
 
 	if(fd==1 || fd==2) {
