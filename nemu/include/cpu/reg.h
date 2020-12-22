@@ -95,6 +95,7 @@ typedef struct {
 	}idtr;	
 	
 	swaddr_t eip;
+	bool INTR;
 
 } CPU_state;
 
