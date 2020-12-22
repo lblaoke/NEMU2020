@@ -46,7 +46,13 @@ uint32_t loader() {
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
 			 */
 			ph->p_vaddr=mm_malloc(ph->p_vaddr,ph->p_memsz);
+
+#ifdef HAS_DEVICE
+			ide_read((void *)ph->p_vaddr,ph->p_offset,ph->p_filesz);
+#else
 			ramdisk_read((void*)ph->p_vaddr, ph->p_offset, ph->p_filesz);
+#endif
+
 			 
 			/* TODO: zero the memory region 
 			 * [VirtAddr + FileSiz, VirtAddr + MemSiz)

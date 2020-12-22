@@ -19,8 +19,8 @@ static void sys_write(TrapFrame *tf) {
 	char* buf = (char*)tf->ecx;
 
 	if(fd==1 || fd==2) {
-		asm volatile (".byte 0xd6" :: "a"(2), "c"(buf), "d"(len));	
-		//while(len--) serial_printc(*(buf++));	
+		//asm volatile (".byte 0xd6" :: "a"(2), "c"(buf), "d"(len));	
+		while(len--) serial_printc(*(buf++));	
 		tf->eax = tf->edx;
 	}
 	else tf->eax = 210;
