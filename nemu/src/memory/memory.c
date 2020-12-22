@@ -3,6 +3,10 @@
 #include "memory/memory.h"
 #include "nemu.h"
 
+int is_mmio(hwaddr_t);
+uint32_t mmio_read(hwaddr_t,size_t,int);
+void mmio_write(hwaddr_t,size_t,uint32_t,int);
+
 lnaddr_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg) {
 	if(cpu.cr0.protect_enable) {
 		Assert(addr+len < cpu.sr[sreg].seg_limit, "CS segment beyond limit!");
@@ -49,8 +53,11 @@ hwaddr_t page_translate(lnaddr_t addr) {
 
 /* Memory accessing interfaces */
 uint32_t hwaddr_read(hwaddr_t addr,size_t len) {
+	int map_id = is_mmio(addr);
+	if(map_id!=-1) return mmio_read(addr,len,map_id) & (~0u>>((4-len)<<3));	
+
 	Address A;
-	A.address=addr;
+	A.address = addr;
 
 	uint32_t block1=cache1_read(A),OFFSET=A.offset,zero=0;
 
@@ -71,6 +78,12 @@ uint32_t hwaddr_read(hwaddr_t addr,size_t len) {
 }
 
 void hwaddr_write(hwaddr_t addr, size_t len, uint32_t buf) {
+	int map_id = is_mmio(addr);
+	if(map_id!=-1) {
+		mmio_write(addr,len,buf,map_id);
+		return;
+	}
+
 	Address A;
 	A.address=addr;
 	cache1_write(A,len,buf);

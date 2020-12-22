@@ -68,3 +68,7 @@
 #include "intr/int.h"
 #include "intr/iret.h"
 #include "intr/cli.h"
+#include "intr/hlt.h"
+
+#include "io/in.h"
+#include "io/out.h"
