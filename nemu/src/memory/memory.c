@@ -40,8 +40,7 @@ hwaddr_t page_translate(lnaddr_t addr) {
 		page_1.val = hwaddr_read(B.address,4);
 
 		Assert(page_1.present, "page do not exist at %x", cpu.eip);
-		//A.tag=page_1.page_frame;
-
+		A.tag=page_1.page_frame;
 
 		//tlb_write(A.tag,page_1.page_frame);
 		return A.address;
