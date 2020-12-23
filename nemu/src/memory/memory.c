@@ -22,11 +22,11 @@ hwaddr_t page_translate(lnaddr_t addr) {
 		Address A,B;
 		A.address=addr;
 
-		B.address=tlb_read(A.tag);
-		if(B.address!=-1) {
-			A.tag=B.address;
-			return A.address;
-		}
+		// B.address=tlb_read(A.tag);
+		// if(B.address!=-1) {
+		// 	A.tag=B.address;
+		// 	return A.address;
+		// }
 
 		PTE dir_1,page_1;
 
@@ -39,12 +39,12 @@ hwaddr_t page_translate(lnaddr_t addr) {
 		B.OFFSET=(A.PAGE<<2);
 		page_1.val = hwaddr_read(B.address,4);
 
-		//Assert(page_1.present, "page do not exist at %x", cpu.eip);
+		Assert(page_1.present, "page do not exist at %x", cpu.eip);
 		A.tag = page_1.page_frame;
-		B.address = addr;
-		B.offset = 0;
+		// B.address = addr;
+		// B.offset = 0;
 
-		tlb_write(B.address,page_1.page_frame);
+		// tlb_write(B.address,page_1.page_frame);
 		return A.address;
 	}
 
