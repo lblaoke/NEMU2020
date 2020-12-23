@@ -22,11 +22,11 @@ hwaddr_t page_translate(lnaddr_t addr) {
 		Address A,B;
 		A.address=addr;
 
-		// B.address=tlb_read(A.tag);
-		// if(B.address!=-1) {
-		// 	A.tag=B.address;
-		// 	return A.address;
-		// }
+		B.address=tlb_read(A.tag);
+		if(B.address!=-1) {
+			A.tag=B.address;
+			return A.address;
+		}
 
 		PTE dir_1,page_1;
 
@@ -42,7 +42,7 @@ hwaddr_t page_translate(lnaddr_t addr) {
 		Assert(page_1.present, "page do not exist at %x", cpu.eip);
 		A.tag=page_1.page_frame;
 
-		//tlb_write(A.tag,page_1.page_frame);
+		tlb_write(A.tag,page_1.page_frame);
 		return A.address;
 	}
 
