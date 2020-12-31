@@ -19,7 +19,7 @@ void create_video_mapping() {
 	tmp[0].page_frame = (uint32_t)va_to_pa(vtable)>>12;
 	tmp[0].present = 1;
 	
-	int i,start=VMEM_ADDR/PAGE_SIZE,end=(VMEM_ADDR+SCR_SIZE)/PAGE_SIZE;
+	int i,start=VMEM_ADDR/PAGE_SIZE,end=(VMEM_ADDR+SCR_SIZE)/PAGE_SIZE+1;
 	for(i=start;i<end;i++) {
 		vtable[i].page_frame = i;
 		vtable[i].present = 1;
