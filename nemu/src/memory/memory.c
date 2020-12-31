@@ -54,7 +54,7 @@ hwaddr_t page_translate(lnaddr_t addr) {
 /* Memory accessing interfaces */
 uint32_t hwaddr_read(hwaddr_t addr,size_t len) {
 	int map_id = is_mmio(addr);
-	if(map_id!=-1) return mmio_read(addr,len,map_id) & (~0u>>((4-len)<<3));	
+	if(map_id>=0) return mmio_read(addr,len,map_id) & (~0u>>((4-len)<<3));	
 
 	Address A;
 	A.address = addr;
@@ -79,7 +79,7 @@ uint32_t hwaddr_read(hwaddr_t addr,size_t len) {
 
 void hwaddr_write(hwaddr_t addr, size_t len, uint32_t buf) {
 	int map_id = is_mmio(addr);
-	if(map_id!=-1) {
+	if(map_id>=0) {
 		mmio_write(addr,len,buf,map_id);
 		return;
 	}
