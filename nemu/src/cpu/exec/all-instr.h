@@ -65,6 +65,7 @@
 #include "con-trans/jge.h"
 #include "con-trans/ja.h"
 #include "con-trans/jnb.h"
+#include "con-trans/jb.h"
 
 #include "intr/int.h"
 #include "intr/iret.h"
