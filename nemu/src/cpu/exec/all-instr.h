@@ -40,6 +40,7 @@
 #include "logic/shld.h"
 #include "logic/cld.h"
 #include "logic/std.h"
+#include "logic/bt.h"
 
 #include "string/rep.h"
 #include "string/stos.h"
